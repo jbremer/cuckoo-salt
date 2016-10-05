@@ -3,12 +3,12 @@ virtualbox:
 
 vmcloak:
   count: 10
-  ipprefix: 192.168.168.
+  ipprefix: 192.168.56.
   # ipstart should be first vm-s ip-s last octet minus one
   ipstart: 100
   basename: cuckoo
-  resultserver_ip: 192.168.168.1
-  tags: win7_sp1_64bit,64_bit,acrobat_reader_10
+  resultserver_ip: 192.168.56.1
+  tags: 
 
 # cuckoo/conf/cuckoo.conf
 db:
@@ -21,7 +21,7 @@ db:
 
 # cuckoo/conf/cuckoo.conf
 conf:
-  resultserver_ip: 192.168.168.1
+  resultserver_ip: 192.168.56.1
   resultserver_port: 2042
   resultserver_up_max: 4194304000
   processing_analysis_size_limit: 4194304000
@@ -32,11 +32,11 @@ conf:
 # cuckoo/conf/reporting.conf
 reporting:
   mongo:
-    host: mongo.example.com
+    host: 127.0.0.1
     port: 27017
   elasticsearch:
     # This should be a comma separated list for multiple nodes
-    hosts: 192.168.168.2:9200
+    hosts: 127.0.0.1:9200
   mattermost:
     url: https://mattermost.example.com/hooks/RandomAPIstring
 

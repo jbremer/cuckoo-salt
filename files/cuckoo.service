@@ -1,0 +1,11 @@
+[Unit]
+Description=Cuckoo Sandbox
+Documentation=http://docs.cuckoosandbox.org/en/latest/
+
+[Service]
+Type=simple
+ExecStart=/etc/init.d/cuckoo.sh start
+ExecStop=/etc/init.d/cuckoo.sh stop
+
+[Install]
+WantedBy=multi-user.target

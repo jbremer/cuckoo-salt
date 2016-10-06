@@ -12,4 +12,6 @@ SaltStack formula for deploying Cuckoo Sandbox
 - Moar testing
 - Pillarize all the configs/Make configuration as dynamic as possible
 - Turn into a proper salt formula
-- Think about creating a salt module for vmcloak since it's all python anyways 
+- Think about creating a salt module for vmcloak since it's all python anyways
+- Add a mongo deploy state?
+- Add an ELK cluster deploy state?

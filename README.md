@@ -3,13 +3,13 @@ SaltStack formula for deploying Cuckoo Sandbox
 
 ## Before running
 
-- Known bug with the pip.installed state. Waiting on an upstream fix. Current workaround is documented in the deps.sls file.
+- Known bug with the pip.installed state. See issue #5
 - vmcloak_generate.sh needs an Office key
-- Testing has been done on Ubuntu 16.04 LTS, but needs a lot more 
+- Set pillar values
 
 ## TODO
 
-- Moar testing
+- Testing has been done on Ubuntu 16.04 LTS, but needs a lot more
 - Pillarize all the configs/Make configuration as dynamic as possible
 - Turn into a proper salt formula
 - Think about creating a salt module for vmcloak since it's all python anyways

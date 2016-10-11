@@ -23,15 +23,10 @@ cuckoo_dependencies:
       - postgresql
       - tcpdump
 
-# TLDR; execute "salt 'machine name' state.apply cuckoo.deps" it will fail, then do "salt 'machine name' service.restart salt-minion" and now if you run the previous state all should be good.
-# Happens probably only on Ubuntu 16.04, fill be fixed when the mentioned issues get fixed...either in salt or in pip.
-# kinda broken, see https://github.com/saltstack/salt/issues/33163 and https://github.com/saltstack/salt/issues/24925
-# basically pip upgrade fixes an Ubuntu 16.04 issue with salt running requirements.txt by updating from the ubuntu version to the upstream version
-# At the same time this upgrade confuses salt, so the first state execution fails, but after a minion restart it succeeds. reload_modules: true should help but it doesn't.
-upgrade_pip:
-  cmd.run:
-    - name: pip install --upgrade pip
-    - reload_modules: true
+pip:
+  pip.installed:
+    - upgrade: True
+    - reload_modules: True
     - require:
       - pkg: cuckoo_dependencies
 
@@ -44,17 +39,17 @@ cuckoo_setcap:
 psycopg2:
   pip.installed:
     - require:
-      - cmd: upgrade_pip
+      - pip: pip
 
 'yara-python':
   pip.installed:
     - require:
-      - cmd: upgrade_pip
+      - pip: pip
 
 distorm3:
   pip.installed:
     - require:
-      - cmd: upgrade_pip
+      - pip: pip
 
 mongodb:
   service.running:

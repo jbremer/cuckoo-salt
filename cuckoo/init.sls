@@ -20,7 +20,7 @@ cuckoo_req_install:
       - upgrade: True
       - require:
         - git: cuckoo_razuz_git
-        - cmd: upgrade_pip
+        - pip: pip
 
 /srv/cuckoo:
   file.directory:

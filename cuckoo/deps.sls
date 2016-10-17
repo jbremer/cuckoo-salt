@@ -6,7 +6,7 @@ cuckoo_dependencies:
     - refresh: True
     - pkgs:
       - git
-      - python-pip 
+      - python-pip
       - libffi-dev
       - libssl-dev
       - python-dev
@@ -30,26 +30,21 @@ pip:
     - require:
       - pkg: cuckoo_dependencies
 
+cuckoo_pip:
+  pip.installed:
+    - upgrade: True
+    - require:
+      - pip: pip
+    - pkgs:
+      - psycopg2
+      - yara-python
+      - distorm3
+
 cuckoo_setcap:
   cmd.run:
     - name: setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
     - require:
       - pkg: cuckoo_dependencies
-
-psycopg2:
-  pip.installed:
-    - require:
-      - pip: pip
-
-'yara-python':
-  pip.installed:
-    - require:
-      - pip: pip
-
-distorm3:
-  pip.installed:
-    - require:
-      - pip: pip
 
 mongodb:
   service.running:
@@ -83,16 +78,17 @@ cuckoodb_priv:
       - postgres_database: cuckoodb
       - postgres_user: cuckoodb_user
 
-{{ salt['pillar.get']('db:user'), 'cuckoo'}}:
-  group:
-    - present
+cuckoo_user:
+  group.present:
+    - name: {{ salt['pillar.get']('db:user'), 'cuckoo'}}
     - require:
       - sls: cuckoo.virtualbox
   user.present:
+    - name: {{ salt['pillar.get']('db:user'), 'cuckoo'}}
     - fullname: cuckoo
     - gid_from_name: True
     - shell: /bin/bash
-    - home: /srv/cuckoo
+    - home: /srv/{{ salt['pillar.get']('db:user'), 'cuckoo'}}
     - groups:
       - vboxusers
     - require:

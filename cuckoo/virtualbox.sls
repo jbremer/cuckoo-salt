@@ -22,7 +22,7 @@ virtualbox:
 vboxnet_clear:
   cmd.run:
     - name: vboxmanage list -l hostonlyifs | grep -oP "(?<=\s)vboxnet\d+$" | xargs -I {} vboxmanage hostonlyif remove {}
-    - user: root
+    - user: cuckoo
     - require:
       - pkg: virtualbox
 

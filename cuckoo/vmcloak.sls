@@ -4,25 +4,11 @@ include:
 genisoimage:
   pkg.installed
 
-vmcloak_git:
-  git.latest:
-    - name: https://github.com/jbremer/vmcloak
-    - target: /srv/vmcloak
-    - force_clone: True
-    - force_fetch: True
-    - force_checkout: True
-    - force_reset: True
+vmcloak:
+  pip.installed:
+    - upgrade: True
     - require:
-      - pkg: cuckoo_dependencies
-
-vmcloak_install:
-  cmd.run:
-    - name: cd /srv/vmcloak && pip install -r requirements.txt --upgrade && python setup.py build && python setup.py install && vmcloak-iptables 192.168.168.0/24 eno1
-    - cwd: /srv/vmcloak
-    - shell: /bin/bash
-    - require:
-      - git: vmcloak_git
-      - pkg: genisoimage
+      - pkg: python-pip
 
 /srv/iso:
   file.directory:
@@ -93,6 +79,6 @@ vmcloak:
     - shell: /bin/bash
     - template: jinja
     - require:
-      - cmd: vmcloak_install
+      - pip: vmcloak
       - mount: /srv/iso/win7
       - file: vmcloak_cleanup

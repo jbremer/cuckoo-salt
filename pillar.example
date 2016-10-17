@@ -300,7 +300,7 @@ cuckoo_conf:
       paginate: 100
     elasticsearch:
       enabled: 'yes'
-      hosts: 127.0.0.1:9200
+      hosts: localhost:9200
       calls: 'yes'
       index_time_pattern: daily
       cuckoo_node: "{{ salt['grains.get']('fqdn') }}"

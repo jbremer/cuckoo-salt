@@ -12,7 +12,7 @@ cuckoo_dependencies:
       - python-dev
       - unzip
       - libxml2-dev
-      - libxslt-dev
+      - libxslt1-dev
       - libjpeg-dev
       - libpq-dev
       - automake
@@ -40,6 +40,7 @@ cuckoo_pip:
       - yara-python
       - distorm3
 
+# Cuckoo-specific setup instructions, refer to the documentation.
 cuckoo_setcap:
   cmd.run:
     - name: setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump

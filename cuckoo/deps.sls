@@ -83,7 +83,7 @@ cuckoodb_priv:
       - postgres_database: cuckoodb
       - postgres_user: cuckoodb_user
 
-{{ salt['pillar.get']('db:user'), 'cuckoo'}}:
+{{ salt['pillar.get']('db:user', 'cuckoo') }}:
   group:
     - present
     - require:

@@ -1,3 +1,6 @@
+include:
+  - cuckoo
+
 suricata:
   pkgrepo.managed:
     - ppa: oisf/suricata-stable
@@ -7,8 +10,8 @@ suricata:
 
 /var/log/suricata:
   file.directory:
-    - user: {{ salt['pillar.get']('db:user'), 'cuckoo'}}
-    - group: {{ salt['pillar.get']('db:user'), 'cuckoo'}} 
+    - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('db:user', 'cuckoo') }}
     - dir_mode: 755
     - file_mode: 644
     - recurse:
@@ -18,12 +21,15 @@ suricata:
     - require:
       - pkg: suricata
 
-/srv/cuckoo/suricata/certs:
+cuckoo_suricata_certs:
   file.directory:
-    - user: cuckoo
-    - group: cuckoo
+    - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/suricata/certs
+    - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('db:user', 'cuckoo') }}
     - mode: 755
     - makedirs: True
+    - require:
+      - user: cuckoo_user
 
 /etc/suricata/suricata.yaml:
   file.managed:
@@ -31,7 +37,7 @@ suricata:
     - user: root
     - group: root
     - template: jinja
-    -require:
+    - require:
       - pkg: suricata
 
 /etc/init.d/suricata:
@@ -40,6 +46,7 @@ suricata:
     - user: root
     - group: root
     - mode: 755
+    - template: jinja
     - require:
       - file: /etc/suricata/suricata.yaml
 

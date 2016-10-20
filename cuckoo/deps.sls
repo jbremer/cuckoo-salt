@@ -1,6 +1,3 @@
-include:
-  - cuckoo.virtualbox
-
 cuckoo_dependencies:
   pkg.installed:
     - refresh: True
@@ -78,19 +75,3 @@ cuckoodb_priv:
     - require:
       - postgres_database: cuckoodb
       - postgres_user: cuckoodb_user
-
-cuckoo_user:
-  group.present:
-    - name: {{ salt['pillar.get']('db:user'), 'cuckoo'}}
-    - require:
-      - sls: cuckoo.virtualbox
-  user.present:
-    - name: {{ salt['pillar.get']('db:user'), 'cuckoo'}}
-    - fullname: cuckoo
-    - gid_from_name: True
-    - shell: /bin/bash
-    - home: /srv/{{ salt['pillar.get']('db:user'), 'cuckoo'}}
-    - groups:
-      - vboxusers
-    - require:
-      - sls: cuckoo.virtualbox

@@ -59,7 +59,7 @@ fi
 check_run_dir() {
     if [ ! -d /var/run/suricata ]; then
 	mkdir /var/run/suricata
-	chown {{ salt['pillar.get']('db:user'), 'cuckoo'}}:{{ salt['pillar.get']('db:user'), 'cuckoo'}} /var/run/suricata
+	chown {{ salt['pillar.get']('db:user', 'cuckoo') }}:{{ salt['pillar.get']('db:user', 'cuckoo') }} /var/run/suricata
 	chmod 0755 /var/run/suricata
     fi
 }
@@ -169,4 +169,3 @@ case "$1" in
 esac
 
 exit 0
-

@@ -11,6 +11,6 @@
 #
 
 sleep 10
-/usr/bin/VBoxManage hostonlyif ipconfig vboxnet0 --ip 192.168.56.1 --netmask 255.255.255.0 2>&1 >> /dev/null
+/usr/bin/VBoxManage hostonlyif ipconfig vboxnet0 --ip {{ salt['pillar.get']('vmcloak:ipprefix', '192.168.56.') }}1 --netmask 255.255.255.0 2>&1 >> /dev/null
 
 exit 0

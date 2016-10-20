@@ -1,3 +1,8 @@
+cuckoo:
+  git: https://github.com/cuckoosandbox/cuckoo.git
+  dir: /srv/cuckoo
+  git_branch: master
+
 virtualbox:
   version: 5.1
 
@@ -9,6 +14,12 @@ vmcloak:
   basename: cuckoo
   resultserver_ip: 192.168.56.1
   tags:
+  interface: eno1
+  dns: 8.8.8.8
+  ramsize: 4096
+  vramsize: 128
+  isomount: /srv/iso/win7
+  workingdir: /srv/iso
 
 db:
   type: postgresql
@@ -62,7 +73,7 @@ cuckoo_conf:
       terminate_processes: 'off'
       reschedule: 'off'
       process_results: 'off'
-      max_analysis_count: 0
+      max_analysis_count: 2
       max_machines_count: 14
       max_vmstartup_count: 4
       freespace: 64

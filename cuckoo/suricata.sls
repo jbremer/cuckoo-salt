@@ -1,5 +1,5 @@
 include:
-  - cuckoo
+  - cuckoo.deps
 
 suricata:
   pkgrepo.managed:

@@ -10,7 +10,7 @@ virtualbox:
   pkg.installed:
     - name: virtualbox-{{ salt['pillar.get']('virtualbox:version') }}
 
-cuckoo_to_vboxusers:
+cuckoo_vboxusers:
   user.present:
     - name: {{ salt['pillar.get']('db:user', 'cuckoo') }}
     - groups:
@@ -33,14 +33,14 @@ vboxnet_clear:
     - name: vboxmanage list -l hostonlyifs | grep -oP "(?<=\s)vboxnet\d+$" | xargs -I {} vboxmanage hostonlyif remove {}
     - user: cuckoo
     - require:
-      - user: cuckoo_to_vboxusers
+      - user: cuckoo_vboxusers
 
 vboxnet_create:
   cmd.run:
     - name: VBoxManage hostonlyif create
     - user: cuckoo
     - require:
-      - user: cuckoo_to_vboxusers
+      - user: cuckoo_vboxusers
       - cmd: vboxnet_clear
 
 vboxnet_set:
@@ -48,7 +48,7 @@ vboxnet_set:
     - name: VBoxManage setextradata global "HostOnly/vboxnet0/IPAddress" 192.168.168.1
     - user: cuckoo
     - require:
-      - user: cuckoo_to_vboxusers
+      - user: cuckoo_vboxusers
       - cmd: vboxnet_create
 
 vboxnet_up:

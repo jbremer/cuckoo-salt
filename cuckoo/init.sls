@@ -16,18 +16,6 @@ cuckoo_razuz_git:
       - sls: cuckoo.deps
       - sls: cuckoo.volatility
 
-cuckoo_user:
-  group.present:
-    - name: {{ salt['pillar.get']('db:user', 'cuckoo') }}
-  user.present:
-    - name: {{ salt['pillar.get']('db:user', 'cuckoo') }}
-    - fullname: {{ salt['pillar.get']('db:user', 'cuckoo') }}
-    - gid_from_name: True
-    - shell: /bin/bash
-    - home: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}
-    - require:
-      - git: cuckoo_razuz_git
-
 razu_to_cuckoo:
   ssh_auth.present:
     - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}

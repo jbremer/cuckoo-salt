@@ -1,6 +1,5 @@
 include:
   - cuckoo.deps
-  - cuckoo.virtualbox
 
 genisoimage:
   pkg.installed
@@ -17,10 +16,15 @@ vmcloak_workingdir:
     - name: {{ salt['pillar.get']('vmcloak:workingdir') }}
     - user: cuckoo
     - group: cuckoo
-    - mode: 755
+    - dir_mode: 755
+    - file_mode: 644
+    - recurse:
+      - user
+      - group
+      - mode
     - makedirs: True
     - require:
-      - user: cuckoo_to_vboxusers
+      - user: cuckoo_user
 
 Win_ISO:
   file.managed:

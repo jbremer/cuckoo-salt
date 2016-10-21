@@ -9,5 +9,5 @@ cuckoo_install_volatility:
     - name: cd /srv/volatility && python setup.py build && python setup.py build install
     - cwd: /srv/volatility
     - shell: /bin/bash
-    - require:
+    - onchanges:
       - git: cuckoo_volatility_git

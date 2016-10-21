@@ -92,3 +92,38 @@ cuckoo_user:
       - vboxusers
     - require:
       - sls: cuckoo.virtualbox
+
+vboxnet_clear:
+  cmd.run:
+    - name: vboxmanage list -l hostonlyifs | grep -oP "(?<=\s)vboxnet\d+$" | xargs -I {} vboxmanage hostonlyif remove {}
+    - user: cuckoo
+    - require:
+      - user: cuckoo_user
+      - pkg: virtualbox
+
+vboxnet_create:
+  cmd.run:
+    - name: VBoxManage hostonlyif create
+    - user: cuckoo
+    - require:
+      - user: cuckoo_user
+      - cmd: vboxnet_clear
+      - pkg: virtualbox
+
+vboxnet_set:
+  cmd.run:
+    - name: VBoxManage setextradata global "HostOnly/vboxnet0/IPAddress" 192.168.168.1
+    - user: cuckoo
+    - require:
+      - user: cuckoo_user
+      - cmd: vboxnet_create
+      - pkg: virtualbox
+
+vboxnet_up:
+  cmd.run:
+    - name: /etc/rc.local
+    - user: root
+    - require:
+      - file: /etc/rc.local
+      - cmd: vboxnet_set
+      - pkg: virtualbox

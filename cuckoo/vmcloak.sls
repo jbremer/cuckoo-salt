@@ -102,3 +102,4 @@ vmcloak:
       - mount: mount_winiso
       - file: vmcloak_cleanup
       - cmd: vmcloak_iptables
+      - cmd: vboxnet_up

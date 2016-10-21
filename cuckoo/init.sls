@@ -50,6 +50,8 @@ cuckoo_conf:
     - source: salt://cuckoo/files/conf
     - require:
       - git: cuckoo_git
+      - user: cuckoo_user
+      - group: cuckoo_user
 
 
 cuckoo_waf:
@@ -59,6 +61,8 @@ cuckoo_waf:
     - cwd: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}
     - require:
       - git: cuckoo_git
+      - user: cuckoo_user
+      - group: cuckoo_user
 
 /etc/init.d/cuckoo.sh:
   file.managed:
@@ -68,7 +72,7 @@ cuckoo_waf:
     - mode: 755
     - template: jinja
     - require:
-        - git: cuckoo_git
+      - git: cuckoo_git
 
 cuckoo_process.conf:
   file.managed:
@@ -79,6 +83,9 @@ cuckoo_process.conf:
     - mode: 644
     - template: jinja
     - makedirs: True
+    - require:
+      - user: cuckoo_user
+      - group: cuckoo_user
 
 cuckoo_api.conf:
   file.managed:
@@ -89,6 +96,9 @@ cuckoo_api.conf:
     - mode: 644
     - template: jinja
     - makedirs: True
+    - require:
+      - user: cuckoo_user
+      - group: cuckoo_user
 
 cuckoo_limits.conf:
   file.append:

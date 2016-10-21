@@ -20,6 +20,7 @@ vmcloak:
   vramsize: 128
   isomount: /srv/iso/win7
   workingdir: /srv/iso
+  office_serial: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 
 db:
   type: postgresql

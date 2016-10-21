@@ -4,7 +4,7 @@ include:
   - cuckoo.vmcloak
   - cuckoo.suricata
 
-cuckoo_razuz_git:
+cuckoo_git:
   git.latest:
     - name: {{ salt['pillar.get']('cuckoo:git', 'https://github.com/cuckoosandbox/cuckoo.git') }}
     - target: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}
@@ -22,7 +22,7 @@ cuckoo_req_install:
       - upgrade: True
       - reload_modules: True
       - require:
-        - git: cuckoo_razuz_git
+        - git: cuckoo_git
         - pip: pip
 
 cuckoo_chmod:
@@ -35,7 +35,7 @@ cuckoo_chmod:
       - user
       - group
     - require:
-      - git: cuckoo_razuz_git
+      - git: cuckoo_git
       - user: cuckoo_user
       - group: cuckoo_user
 
@@ -49,7 +49,7 @@ cuckoo_conf:
     - template: jinja
     - source: salt://cuckoo/files/conf
     - require:
-      - git: cuckoo_razuz_git
+      - git: cuckoo_git
 
 
 cuckoo_waf:
@@ -58,7 +58,7 @@ cuckoo_waf:
     - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
     - cwd: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}
     - require:
-      - git: cuckoo_razuz_git
+      - git: cuckoo_git
 
 /etc/init.d/cuckoo.sh:
   file.managed:
@@ -68,7 +68,7 @@ cuckoo_waf:
     - mode: 755
     - template: jinja
     - require:
-        - git: cuckoo_razuz_git
+        - git: cuckoo_git
 
 cuckoo_process.conf:
   file.managed:

@@ -20,6 +20,8 @@ suricata:
       - mode
     - require:
       - pkg: suricata
+      - user: cuckoo_user
+      - group: cuckoo_user
 
 cuckoo_suricata_certs:
   file.directory:
@@ -30,6 +32,7 @@ cuckoo_suricata_certs:
     - makedirs: True
     - require:
       - user: cuckoo_user
+      - group: cuckoo_user
 
 /etc/suricata/suricata.yaml:
   file.managed:

@@ -4,9 +4,8 @@ SaltStack formula for deploying Cuckoo Sandbox.
 
 ## Before running
 
-- Known bug with the pip.installed state. See issue #5
-- vmcloak_generate.sh needs an Office key
-- Set pillar values
+- vmcloak needs an Office key to be set in pillar.
+- Pillar value for hosts network interface needs to be set in pillar to the correct value.
 
 ## Usage
 
@@ -17,12 +16,11 @@ SaltStack formula for deploying Cuckoo Sandbox.
 * Add `cuckoo` to pillar top file.
 * Fill out the `cuckoo.sls` pillar as desired.
 * Run `salt 'minion_id' saltutil.refresh_pillar` to reload modified pillar on minions.
+* Run either `salt 'minion_id' state.highstate` or `salt 'minion_id' state.apply cuckoo`.
 
 ## TODO
 
-- Testing has been done on Ubuntu 16.04 LTS, but needs a lot more
-- Pillarize all the configs/Make configuration as dynamic as possible
+- Testing has been done on Ubuntu 16.04 LTS, but needs a lot more.
 - Turn into a proper salt formula
-- Think about creating a salt module for vmcloak since it's all python anyways
 - Add a mongo deploy state?
 - Add an ELK cluster deploy state?

@@ -1,3 +1,8 @@
+cuckoo:
+  git: https://github.com/cuckoosandbox/cuckoo.git
+  dir: /srv/cuckoo
+  git_branch: master
+
 virtualbox:
   version: 5.1
 
@@ -8,39 +13,371 @@ vmcloak:
   ipstart: 100
   basename: cuckoo
   resultserver_ip: 192.168.56.1
-  tags: 
+  tags:
+  interface: eno1
+  dns: 8.8.8.8
+  ramsize: 4096
+  vramsize: 128
+  isomount: /srv/iso/win7
+  workingdir: /srv/iso
+  office_serial: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 
-# cuckoo/conf/cuckoo.conf
 db:
   type: postgresql
   server: localhost
   name: cuckoo
   user: cuckoo
-  password: MySuperSecretPassword
+  password: cuckoo
   port: 5432
 
-# cuckoo/conf/cuckoo.conf
-conf:
-  resultserver_ip: 192.168.56.1
-  resultserver_port: 2042
-  resultserver_up_max: 4194304000
-  processing_analysis_size_limit: 4194304000
-  timeout_default: 200
-  timeout_critical: 600
-  vm_state: 120
-
-# cuckoo/conf/reporting.conf
-reporting:
-  mongo:
-    host: 127.0.0.1
-    port: 27017
-  elasticsearch:
-    # This should be a comma separated list for multiple nodes
-    hosts: 127.0.0.1:9200
-  mattermost:
-    url: https://mattermost.example.com/hooks/RandomAPIstring
-
-# cuckoo/conf/processing.conf
-processing:
-  irma:
-    url: https://irma.example.com
+# cuckoo/conf/*.conf
+cuckoo_conf:
+  auxiliary:
+    sniffer:
+      enabled: 'yes'
+      tcpdump: /usr/sbin/tcpdump
+    mitm:
+      enabled: 'no'
+      mitmdump: /usr/local/bin/mitmdump
+      port_base: 50000
+      script: data/mitm.py
+      certificate: bin/cert.p12
+    services:
+      enabled: 'no'
+      services: honeyd
+      timeout: 0
+    reboot:
+      enabled: 'yes'
+  avd:
+    avd:
+      mode: headless
+      emulator_path: /home/cuckoo/android-sdk-linux/tools/emulator
+      adb_path: /home/cuckoo/android-sdk-linux/platform-tools/adb
+      avd_path: /home/cuckoo/.android/avd
+      reference_machine: cuckoo-bird
+      machines: cuckoo1
+    cuckoo1:
+      label: cuckoo1
+      platform: android
+      ip: 127.0.0.1
+      emulator_port: 5554
+      resultserver_ip: 10.0.2.2
+      resultserver_port: 2042
+  cuckoo:
+    cuckoo:
+      version_check: 'on'
+      cuckoo_id: {{ salt['grains.get']('host') }}
+      delete_original: 'off'
+      delete_bin_copy: 'off'
+      machinery: virtualbox
+      memory_dump: 'off'
+      terminate_processes: 'off'
+      reschedule: 'off'
+      process_results: 'off'
+      max_analysis_count: 2
+      max_machines_count: 14
+      max_vmstartup_count: 4
+      freespace: 64
+      tmppath: /tmp
+      rooter: /tmp/cuckoo-rooter
+      node_name: "{{ salt['grains.get']('fqdn') }}"
+    routing:
+      route: internet
+      internet: 'none'
+      rt_table: main
+      auto_rt: 'yes'
+    resultserver:
+      ip: 192.168.168.1
+      port: 2042
+      force_port: 'no'
+      upload_max_size: 4194304000
+    processing:
+      analysis_size_limit: 4194304000
+      resolve_dns: 'on'
+      sort_pcap: 'on'
+    database:
+      timeout: ""
+    timeouts:
+      default: 200
+      critical: 600
+      vm_state: 120
+  esx:
+    esx:
+      dsn: esx://127.0.0.1/?no_verify=1
+      username: username_goes_here
+      password: password_goes_here
+      machines: analysis1
+      interface: eth0
+    analysis1:
+      label: cuckoo1
+      platform: windows
+      snapshot: clean_snapshot
+      ip: 192.168.122.105
+  kvm:
+    kvm:
+      machines: cuckoo1
+      interface: virbr0
+    cuckoo1:
+      label: cuckoo1
+      platform: windows
+      ip: 192.168.122.105
+  memory:
+    basic:
+      guest_profile: Win7SP1x64
+      delete_memdump: 'yes'
+    malfind:
+      enabled: 'off'
+      filter: 'on'
+    apihooks:
+      enabled: 'no'
+      filter: 'on'
+    pslist:
+      enabled: 'yes'
+      filter: 'off'
+    psxview:
+      enabled: 'yes'
+      filter: 'off'
+    callbacks:
+      enabled: 'no'
+      filter: 'off'
+    idt:
+      enabled: 'no'
+      filter: 'off'
+    timers:
+      enabled: 'no'
+      filter: 'off'
+    messagehooks:
+      enabled: 'no'
+      filter: 'off'
+    getsids:
+      enabled: 'no'
+      filter: 'off'
+    privs:
+      enabled: 'no'
+      filter: 'off'
+    dlllist:
+      enabled: 'no'
+      filter: 'on'
+    handles:
+      enabled: 'no'
+      filter: 'on'
+    ldrmodules:
+      enabled: 'no'
+      filter: 'on'
+    mutantscan:
+      enabled: 'no'
+      filter: 'on'
+    devicetree:
+      enabled: 'no'
+      filter: 'on'
+    svcscan:
+      enabled: 'yes'
+      filter: 'on'
+    modscan:
+      enabled: 'no'
+      filter: 'on'
+    yarascan:
+      enabled: 'yes'
+      filter: 'off'
+    ssdt:
+      enabled: 'no'
+      filter: 'on'
+    gdt:
+      enabled: 'no'
+      filter: 'on'
+    sockscan:
+      enabled: 'no'
+      filter: 'off'
+    netscan:
+      enabled: 'yes'
+      filter: 'off'
+    mask:
+      enabled: 'no'
+      pid_generic:
+  physical:
+    physical:
+      machines: physical1
+      user: username
+      password: password
+      interface: eth0
+    fog:
+      hostname: 'none'
+      username: fog
+      password: password
+    physical1:
+      label: physical1
+      platform: windows
+      ip: 192.168.56.101
+  processing:
+    analysisinfo:
+      enabled: 'yes'
+    apkinfo:
+      enabled: 'no'
+    baseline:
+      enabled: 'no'
+    behavior:
+      enabled: 'yes'
+    buffer:
+      enabled: 'yes'
+    debug:
+      enabled: 'yes'
+    droidmon:
+      enabled: 'no'
+    dropped:
+      enabled: 'yes'
+    dumptls:
+      enabled: 'yes'
+    googleplay:
+      enabled: 'no'
+      android_id:
+      google_login:
+      google_password:
+    memory:
+      enabled: 'no'
+    misp:
+      enabled: 'no'
+      url:
+      apikey:
+      maxioc: 100
+    network:
+      enabled: 'yes'
+    procmemory:
+      enabled: 'yes'
+      idapro: 'no'
+      extract_img: 'yes'
+      dump_delete: 'no'
+    procmon:
+      enabled: 'yes'
+    screenshots:
+      enabled: 'no'
+      tesseract: /usr/bin/tesseract
+    snort:
+      enabled: 'no'
+    static:
+      enabled: 'yes'
+    strings:
+      enabled: 'yes'
+    suricata:
+      enabled: 'yes'
+      socket: /var/run/suricata/suricata-command.socket
+    targetinfo:
+      enabled: 'yes'
+    virustotal:
+      enabled: 'yes'
+      timeout: 60
+      scan: 0
+      key: a0283a2c3d55728300d064874239b5346fb991317e8449fe43c902879d758088
+    irma:
+      enabled: 'no'
+      timeout: 60
+      scan: 'yes'
+      force: 'yes'
+      url: https://irma.example.com
+  qemu:
+    qemu:
+      path: /usr/bin/qemu-system-x86_64
+      machines: vm1,vm2
+      interface: qemubr
+    vm1:
+      label: vm1
+      image: /home/rep/vms/qvm_wheezy64_1.qcow2
+      platform: linux
+      ip: 192.168.55.2
+      interface: qemubr
+      resultserver_ip: 192.168.55.1
+      tags: debian_wheezy,64_bit
+    vm2:
+      label: vm2
+      image: /home/rep/vms/qvm_wheezy64_1.qcow2
+      arch: mipsel
+      kernel_path: '{imagepath}/vmlinux-3.16.0-4-4kc-malta-mipsel'
+      platform: linux
+      ip: 192.168.55.3
+      interface: qemubr
+      tags: debian_wheezy,mipsel
+  reporting:
+    jsondump:
+      enabled: 'yes'
+      indent: 4
+      encoding: UTF-8
+      calls: 'yes'
+    reporthtml:
+      enabled: 'yes'
+    mongodb:
+      enabled: 'yes'
+      host: localhost
+      port: 27017
+      db: {{ salt['grains.get']('host') }}
+      store_memdump: 'yes'
+      paginate: 100
+    elasticsearch:
+      enabled: 'yes'
+      hosts: localhost:9200
+      calls: 'yes'
+      index_time_pattern: daily
+      cuckoo_node: "{{ salt['grains.get']('fqdn') }}"
+    moloch:
+      enabled: 'no'
+    mattermost:
+      enabled: 'yes'
+      url: https://mattermost.example.com/hooks/RandomAPIstring
+      myurl: http://{{ salt['grains.get']('fqdn') }}:8080/analysis/
+      username: {{ salt['grains.get']('fqdn') }}
+      show-virustotal: 1
+      show-signatures: 1
+      show-urls: 1
+  virtualbox:
+    virtualbox:
+      mode: headless
+      path: /usr/bin/VBoxManage
+      interface: vboxnet0
+    honeyd:
+      label: honeyd
+      platform: linux
+      ip: 192.168.56.102
+      tags: service, honeyd
+      options: nictrace noagen,cuckoo11,cuckoo12t
+  vmware:
+    vmware:
+      mode: gui
+      path: /usr/bin/vmrun
+      machines: cuckoo1
+      interface: virbr0
+    cuckoo1:
+      vmx_path: ../cuckoo1/cuckoo1.vmx
+      snapshot: Snapshot1
+      platform: windows
+      ip: 192.168.54.111
+  vpn:
+    vpn:
+      enabled: 'no'
+      vpns: vpn0
+    vpn0:
+      name: vpn0
+      description: Spain, Europe
+      interface: tun0
+      rt_table: tun0
+  vsphere:
+    vsphere:
+      host: 10.0.0.1
+      port: 443
+      user: username_goes_here
+      pwd: password_goes_here
+      machines: analysis1
+      interface: eth0
+    analysis1:
+      label: cuckoo1
+      platform: windows
+      snapshot: cuckoo_ready_running
+      ip: 192.168.1.1
+  xenserver:
+    xenserver:
+      user: root
+      password: changeme
+      url: https://xenserver
+      machines: cuckoo1
+      interface: virbr0
+    cuckoo1:
+      uuid: 00000000-0000-0000-0000-000000000000
+      platform: windows
+      ip: 192.168.54.111

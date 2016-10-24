@@ -6,13 +6,13 @@ cuckoo_dependencies:
     - refresh: True
     - pkgs:
       - git
-      - python-pip 
+      - python-pip
       - libffi-dev
       - libssl-dev
       - python-dev
       - unzip
       - libxml2-dev
-      - libxslt-dev
+      - libxslt1-dev
       - libjpeg-dev
       - libpq-dev
       - automake
@@ -30,26 +30,22 @@ pip:
     - require:
       - pkg: cuckoo_dependencies
 
+cuckoo_pip:
+  pip.installed:
+    - upgrade: True
+    - require:
+      - pip: pip
+    - pkgs:
+      - psycopg2
+      - yara-python
+      - distorm3
+
+# Cuckoo-specific setup instructions, refer to the documentation.
 cuckoo_setcap:
   cmd.run:
     - name: setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
     - require:
       - pkg: cuckoo_dependencies
-
-psycopg2:
-  pip.installed:
-    - require:
-      - pip: pip
-
-'yara-python':
-  pip.installed:
-    - require:
-      - pip: pip
-
-distorm3:
-  pip.installed:
-    - require:
-      - pip: pip
 
 mongodb:
   service.running:
@@ -83,17 +79,51 @@ cuckoodb_priv:
       - postgres_database: cuckoodb
       - postgres_user: cuckoodb_user
 
-{{ salt['pillar.get']('db:user', 'cuckoo') }}:
-  group:
-    - present
+cuckoo_user:
+  group.present:
+    - name: {{ salt['pillar.get']('db:user', 'cuckoo') }}
     - require:
       - sls: cuckoo.virtualbox
   user.present:
-    - fullname: cuckoo
+    - name: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - fullname: {{ salt['pillar.get']('db:user', 'cuckoo') }}
     - gid_from_name: True
-    - shell: /bin/bash
-    - home: /srv/cuckoo
     - groups:
       - vboxusers
     - require:
       - sls: cuckoo.virtualbox
+
+vboxnet_clear:
+  cmd.run:
+    - name: vboxmanage list -l hostonlyifs | grep -oP "(?<=\s)vboxnet\d+$" | xargs -I {} vboxmanage hostonlyif remove {}
+    - user: cuckoo
+    - require:
+      - user: cuckoo_user
+      - pkg: virtualbox
+
+vboxnet_create:
+  cmd.run:
+    - name: VBoxManage hostonlyif create
+    - user: cuckoo
+    - require:
+      - user: cuckoo_user
+      - cmd: vboxnet_clear
+      - pkg: virtualbox
+
+vboxnet_set:
+  cmd.run:
+    - name: VBoxManage setextradata global "HostOnly/vboxnet0/IPAddress" 192.168.168.1
+    - user: cuckoo
+    - require:
+      - user: cuckoo_user
+      - cmd: vboxnet_create
+      - pkg: virtualbox
+
+vboxnet_up:
+  cmd.run:
+    - name: /etc/rc.local
+    - user: root
+    - require:
+      - file: /etc/rc.local
+      - cmd: vboxnet_set
+      - pkg: virtualbox

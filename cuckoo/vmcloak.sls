@@ -4,95 +4,102 @@ include:
 genisoimage:
   pkg.installed
 
-vmcloak_git:
-  git.latest:
-    - name: https://github.com/jbremer/vmcloak
-    - target: /srv/vmcloak
-    - force_clone: True
-    - force_fetch: True
-    - force_checkout: True
-    - force_reset: True
-    - require:
-      - pkg: cuckoo_dependencies
-
 vmcloak_install:
-  cmd.run:
-    - name: cd /srv/vmcloak && pip install -r requirements.txt --upgrade && python setup.py build && python setup.py install && vmcloak-iptables 192.168.168.0/24 eno1
-    - cwd: /srv/vmcloak
-    - shell: /bin/bash
+  pip.installed:
+    - name: vmcloak
+    - upgrade: True
     - require:
-      - git: vmcloak_git
-      - pkg: genisoimage
+      - pip: pip
 
-/srv/iso:
+vmcloak_workingdir:
   file.directory:
+    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}
     - user: cuckoo
     - group: cuckoo
-    - mode: 755
+    - dir_mode: 755
+    - file_mode: 644
+    - recurse:
+      - user
+      - group
+      - mode
     - makedirs: True
     - require:
-      - user: cuckoo
-      - group: cuckoo
+      - user: cuckoo_user
 
-/srv/iso/Win_7SP1_x64.ISO:
+Win_ISO:
   file.managed:
-      - source: salt://cuckoo/files/Win_7SP1_x64.ISO
-      - user: cuckoo
-      - group: cuckoo
-      - mode: 644
-      - require:
-        - file: /srv/iso
+    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/Win_7SP1_x64.ISO
+    - source: salt://cuckoo/files/Win_7SP1_x64.ISO
+    - user: cuckoo
+    - group: cuckoo
+    - mode: 644
+    - require:
+      - file: vmcloak_workingdir
 
-/srv/iso/Office_2010SP1_x64.ISO:
+Office_ISO:
   file.managed:
+    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/Office_2010SP1_x64.ISO
     - source: salt://cuckoo/files/Office_2010SP1_x64.ISO
     - user: cuckoo
     - group: cuckoo
     - mode: 644
     - require:
-      - file: /srv/iso
+      - file: vmcloak_workingdir
 
-/srv/iso/Archive.zip:
+Archive_zip:
   file.managed:
+    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/Archive.zip
     - source: salt://cuckoo/files/Archive.zip
     - user: cuckoo
     - group: cuckoo
     - mode: 644
     - require:
-      - file: /srv/iso
+      - file: vmcloak_workingdir
 
-/srv/iso/dogezilla.jpg:
+wallpaper:
   file.managed:
+    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/dogezilla.jpg
     - source: salt://cuckoo/files/dogezilla.jpg
     - user: cuckoo
     - group: cuckoo
     - mode: 644
     - require:
-      - file: /srv/iso
+      - file: vmcloak_workingdir
 
-/srv/iso/win7:
+mount_winiso:
   mount.mounted:
+    - name: {{ salt['pillar.get']('vmcloak:isomount') }}
     - device: /srv/iso/Win_7SP1_x64.ISO
     - fstype: udf
     - mkmnt: True
     - persist: False
     - opts: loop
     - require:
-      - file: /srv/iso/Win_7SP1_x64.ISO
+      - file: Win_ISO
 
 vmcloak_cleanup:
   file.absent:
-    - name: /srv/cuckoo/.vmcloak
+    - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/.vmcloak
+
+vmcloak_iptables:
+  cmd.run:
+    - name: vmcloak-iptables 192.168.168.0/24 {{ salt['pillar.get']('vmcloak:interface') }}
+    - runas: root
+    - shell: /bin/bash
+    - require:
+      - pip: vmcloak_install
 
 vmcloak:
   cmd.script:
     - source: salt://cuckoo/files/vmcloak_generate.sh
-    - cwd: /srv/vmcloak
+    - cwd: {{ salt['pillar.get']('vmcloak:workingdir') }}
     - user: cuckoo
     - group: cuckoo
     - shell: /bin/bash
     - template: jinja
     - require:
-      - cmd: vmcloak_install
-      - mount: /srv/iso/win7
+      - pip: vmcloak_install
+      - mount: mount_winiso
       - file: vmcloak_cleanup
+      - cmd: vmcloak_iptables
+      - cmd: vboxnet_up

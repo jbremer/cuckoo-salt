@@ -4,67 +4,65 @@ include:
   - cuckoo.vmcloak
   - cuckoo.suricata
 
-cuckoo_razuz_git:
+cuckoo_git:
   git.latest:
-    - name: https://github.com/razuz/cuckoo.git
-    - target: /srv/cuckoo
+    - name: {{ salt['pillar.get']('cuckoo:git', 'https://github.com/cuckoosandbox/cuckoo.git') }}
+    - target: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}
     - force_clone: True
     - force_reset: True
+    - branch: {{ salt['pillar.get']('cuckoo:git_branch', 'master') }}
+    - rev: {{ salt['pillar.get']('cuckoo:git_branch', 'HEAD') }}
     - require:
       - sls: cuckoo.deps
       - sls: cuckoo.volatility
 
 cuckoo_req_install:
     pip.installed:
-      - requirements: /srv/cuckoo/requirements.txt
+      - requirements: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/requirements.txt
       - upgrade: True
+      - reload_modules: True
       - require:
-        - git: cuckoo_razuz_git
+        - git: cuckoo_git
         - pip: pip
 
-/srv/cuckoo:
+cuckoo_chmod:
   file.directory:
-    - user: cuckoo
-    - group: cuckoo
+    - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}
+    - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('db:user', 'cuckoo') }}
     - mode: 755
     - recurse:
       - user
       - group
     - require:
-      - git: cuckoo_razuz_git
-      - user: cuckoo
-      - group: cuckoo
+      - git: cuckoo_git
+      - user: cuckoo_user
+      - group: cuckoo_user
 
-/srv/cuckoo/conf:
+cuckoo_conf:
   file.recurse:
-    - user: cuckoo
-    - group: cuckoo
+    - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/conf
+    - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('db:user', 'cuckoo') }}
     - file_mode: 644
     - dir_mode: 750
     - template: jinja
     - source: salt://cuckoo/files/conf
     - require:
-      - git: cuckoo_razuz_git
+      - git: cuckoo_git
+      - user: cuckoo_user
+      - group: cuckoo_user
 
-/srv/cuckoo/conf/virtualbox.conf:
-  file.managed:
-    - user: cuckoo
-    - group: cuckoo
-    - mode: 644
-    - source: salt://test/virtualbox.conf
-    - template: jinja
-    - makedirs: True
-    - require:
-      - git: cuckoo_razuz_git
-      - file: /srv/cuckoo/conf
 
 cuckoo_waf:
   cmd.run:
-    - name: cd /srv/cuckoo && ./utils/community.py -waf
-    - user: cuckoo
-    - cwd: /srv/cuckoo
+    - name: cd {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }} && ./utils/community.py -waf
+    - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - cwd: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}
     - require:
-      - git: cuckoo_razuz_git
+      - git: cuckoo_git
+      - user: cuckoo_user
+      - group: cuckoo_user
 
 /etc/init.d/cuckoo.sh:
   file.managed:
@@ -72,27 +70,39 @@ cuckoo_waf:
     - user: root
     - group: root
     - mode: 755
+    - template: jinja
     - require:
-        - git: cuckoo_razuz_git
+      - git: cuckoo_git
 
-'/srv/cuckoo/screenconf/process.conf':
+cuckoo_process.conf:
   file.managed:
+    - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/screenconf/process.conf
     - source: salt://cuckoo/files/process.conf
-    - user: cuckoo
-    - group: cuckoo
+    - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('db:user', 'cuckoo') }}
     - mode: 644
+    - template: jinja
     - makedirs: True
+    - require:
+      - user: cuckoo_user
+      - group: cuckoo_user
 
-'/srv/cuckoo/screenconf/api.conf':
+cuckoo_api.conf:
   file.managed:
+    - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/screenconf/api.conf
     - source: salt://cuckoo/files/api.conf
-    - user: cuckoo
-    - group: cuckoo
+    - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('db:user', 'cuckoo') }}
     - mode: 644
+    - template: jinja
     - makedirs: True
+    - require:
+      - user: cuckoo_user
+      - group: cuckoo_user
 
-'/etc/security/limits.conf':
+cuckoo_limits.conf:
   file.append:
+    - name: /etc/security/limits.conf
     - source: salt://cuckoo/files/limits.conf
 
 cuckoo_start:

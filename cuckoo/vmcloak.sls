@@ -26,56 +26,87 @@ vmcloak_workingdir:
     - require:
       - user: cuckoo_user
 
-Win_ISO:
+winxp_iso:
   file.managed:
-    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/Win_7SP1_x64.ISO
-    - source: salt://cuckoo/files/Win_7SP1_x64.ISO
+    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/winxp.iso
+    - source: salt://cuckoo/files/winxp.iso
     - user: cuckoo
     - group: cuckoo
     - mode: 644
     - require:
       - file: vmcloak_workingdir
 
-Office_ISO:
+win7x64_iso:
   file.managed:
-    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/Office_2010SP1_x64.ISO
-    - source: salt://cuckoo/files/Office_2010SP1_x64.ISO
+    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/win7x64.iso
+    - source: salt://cuckoo/files/win7x64.iso
     - user: cuckoo
     - group: cuckoo
     - mode: 644
     - require:
       - file: vmcloak_workingdir
 
-Archive_zip:
+office2007.iso:
   file.managed:
-    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/Archive.zip
-    - source: salt://cuckoo/files/Archive.zip
+    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/office2007.iso
+    - source: salt://cuckoo/files/office2007.iso
     - user: cuckoo
     - group: cuckoo
     - mode: 644
     - require:
       - file: vmcloak_workingdir
 
-wallpaper:
+office2010.iso:
   file.managed:
-    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/dogezilla.jpg
-    - source: salt://cuckoo/files/dogezilla.jpg
+    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/office2010.iso
+    - source: salt://cuckoo/files/office2010.iso
     - user: cuckoo
     - group: cuckoo
     - mode: 644
     - require:
       - file: vmcloak_workingdir
 
-mount_winiso:
+archive_zip:
+  file.managed:
+    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/archive.zip
+    - source: salt://cuckoo/files/archive.zip
+    - user: cuckoo
+    - group: cuckoo
+    - mode: 644
+    - require:
+      - file: vmcloak_workingdir
+
+wallpaper_jpg:
+  file.managed:
+    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/wallpaper.jpg
+    - source: salt://cuckoo/files/wallpaper.jpg
+    - user: cuckoo
+    - group: cuckoo
+    - mode: 644
+    - require:
+      - file: vmcloak_workingdir
+
+winxp_mount:
   mount.mounted:
-    - name: {{ salt['pillar.get']('vmcloak:isomount') }}
-    - device: /srv/iso/Win_7SP1_x64.ISO
+    - name: {{ salt['pillar.get']('vmcloak:isomount') }}/winxp
+    - device: {{ salt['pillar.get']('vmcloak:workingdir') }}/winxp.iso
     - fstype: udf
     - mkmnt: True
     - persist: False
     - opts: loop
     - require:
-      - file: Win_ISO
+      - file: winxp_iso
+
+win7x64_mount:
+  mount.mounted:
+    - name: {{ salt['pillar.get']('vmcloak:isomount') }}/win7x64
+    - device: {{ salt['pillar.get']('vmcloak:workingdir') }}/win7x64.iso
+    - fstype: udf
+    - mkmnt: True
+    - persist: False
+    - opts: loop
+    - require:
+      - file: win7x64_iso
 
 vmcloak_cleanup:
   file.absent:
@@ -83,7 +114,7 @@ vmcloak_cleanup:
 
 vmcloak_iptables:
   cmd.run:
-    - name: vmcloak-iptables 192.168.168.0/24 {{ salt['pillar.get']('vmcloak:interface') }}
+    - name: vmcloak-iptables {{ salt['pillar.get']('vmcloak:ipprefix') }}0/24 {{ salt['pillar.get']('vmcloak:interface') }}
     - runas: root
     - shell: /bin/bash
     - require:

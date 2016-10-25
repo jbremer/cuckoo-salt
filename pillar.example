@@ -7,13 +7,9 @@ virtualbox:
   version: 5.1
 
 vmcloak:
-  count: 10
   ipprefix: 192.168.56.
-  # ipstart should be first vm-s ip-s last octet minus one
-  ipstart: 100
-  basename: cuckoo
+  # First VMs IP address last octet minus one.
   resultserver_ip: 192.168.56.1
-  tags:
   interface: eno1
   dns: 8.8.8.8
   ramsize: 4096
@@ -21,6 +17,20 @@ vmcloak:
   isomount: /srv/iso/win7
   workingdir: /srv/iso
   office_serial: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+
+vms:
+  winxp:
+    create: yes
+    basename: winxp
+    count: 10
+    ipstart: 100
+    tags:
+  win7x64:
+    create: no
+    basename: win7x64
+    count: 10
+    ipstart: 200
+    tags:
 
 db:
   type: postgresql
@@ -331,12 +341,6 @@ conf:
       mode: headless
       path: /usr/bin/VBoxManage
       interface: vboxnet0
-    honeyd:
-      label: honeyd
-      platform: linux
-      ip: 192.168.56.102
-      tags: service, honeyd
-      options: nictrace noagen,cuckoo11,cuckoo12t
   vmware:
     vmware:
       mode: gui

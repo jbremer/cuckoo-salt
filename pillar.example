@@ -116,9 +116,9 @@ conf:
     database:
       timeout: ""
     timeouts:
-      default: 200
-      critical: 600
-      vm_state: 120
+      default: 120
+      critical: 60
+      vm_state: 60
   esx:
     esx:
       dsn: esx://127.0.0.1/?no_verify=1

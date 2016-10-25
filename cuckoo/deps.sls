@@ -67,20 +67,20 @@ postgresql:
   service.running:
     - enable: True
 
-cuckoodb:
+db:
   postgres_database.present:
     - name: {{ salt['pillar.get']('db:name', 'cuckoo') }}
     - require:
       - service: postgresql
 
-cuckoodb_user:
+db_user:
   postgres_user.present:
     - name: {{ salt['pillar.get']('db:user', 'cuckoo') }}
     - password: {{ salt['pillar.get']('db:password', 'cuckoo') }}
     - require:
       - service: postgresql
 
-cuckoodb_priv:
+db_priv:
   postgres_privileges.present:
     - name: {{ salt['pillar.get']('db:name', 'cuckoo') }}
     - object_name: {{ salt['pillar.get']('db:user', 'cuckoo') }}
@@ -88,8 +88,8 @@ cuckoodb_priv:
     - privileges:
       - ALL
     - require:
-      - postgres_database: cuckoodb
-      - postgres_user: cuckoodb_user
+      - postgres_database: db
+      - postgres_user: db_user
 
 cuckoo_user:
   group.present:

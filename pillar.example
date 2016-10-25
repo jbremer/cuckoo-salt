@@ -31,7 +31,7 @@ db:
   port: 5432
 
 # cuckoo/conf/*.conf
-cuckoo_conf:
+conf:
   auxiliary:
     sniffer:
       enabled: 'yes'

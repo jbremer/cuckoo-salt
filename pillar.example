@@ -14,7 +14,10 @@ vmcloak:
   dns: 8.8.8.8
   isomountdir: /mnt
   workingdir: /srv/iso
-  office_serial: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+
+office:
+  2007: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+  2010: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 
 vms:
   winxp:

@@ -36,6 +36,7 @@ vboxnet0_ipconfig:
     - require:
       - cmd: vboxnet0_setextra
 
+{% if salt['pillar.get']('vms:winxp:create') %}
 winxp_master_init:
   cmd.run:
     - name: >
@@ -63,6 +64,20 @@ winxp_master_install:
     - require:
       - cmd: winxp_master_init
 
+winxp_snapshots:
+  cmd.run:
+    - name: >
+        vmcloak snapshot winxp_master
+        --count {{ salt['pillar.get']('vms:winxp:count') }}
+        {{ salt['pillar.get']('vms:winxp:basename') }}
+        {{ salt['pillar.get']('vmcloak:ipprefix') }}{{ salt['pillar.get']('vms:winxp:ipstart') + 1 }}
+        && true
+    - user: cuckoo
+    - require:
+      - cmd: winxp_master_install
+{% endif %}
+
+{% if salt['pillar.get']('vms:win7x64:create') %}
 win7x64_master_init:
   cmd.run:
     - name: >
@@ -91,17 +106,37 @@ win7x64_master_install:
     - require:
       - cmd: win7x64_master_init
 
-winxp_snapshots:
+{% if salt['pillar.get']('office:2007') != 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX' %}
+win7x64_office2007:
   cmd.run:
     - name: >
-        vmcloak snapshot winxp_master
-        --count {{ salt['pillar.get']('vms:winxp:count') }}
-        {{ salt['pillar.get']('vms:winxp:basename') }}
-        {{ salt['pillar.get']('vmcloak:ipprefix') }}{{ salt['pillar.get']('vms:winxp:ipstart') + 1 }}
+        vmcloak install win7x64_master
+        office
+        office.isopath={{ salt['pillar.get']('vmcloak:workingdir') }}/office2007.iso
+        office.serialkey={{ salt[pillar.get]('office:2007') }}
+        office.activate=1
         && true
     - user: cuckoo
     - require:
-      - cmd: winxp_master_install
+      - cmd: win7x64_master_install
+      - file: office2007.iso
+{% endif %}
+
+{% if salt['pillar.get']('office:2010') != 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX' %}
+win7x64_office2010:
+  cmd.run:
+    - name: >
+        vmcloak install win7x64_master
+        office
+        office.isopath={{ salt['pillar.get']('vmcloak:workingdir') }}/office2010.iso
+        office.serialkey={{ salt[pillar.get]('office:2010') }}
+        office.activate=1
+        && true
+    - user: cuckoo
+    - require:
+      - cmd: win7x64_master_install
+      - file: office2010.iso
+{% endif %}
 
 win7x64_snapshots:
   cmd.run:
@@ -114,3 +149,4 @@ win7x64_snapshots:
     - user: cuckoo
     - require:
       - cmd: win7x64_master_install
+{% endif %}

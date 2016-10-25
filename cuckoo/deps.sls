@@ -23,6 +23,18 @@ cuckoo_dependencies:
       - postgresql
       - tcpdump
 
+virtualbox:
+  pkgrepo.managed:
+    - name: deb http://download.virtualbox.org/virtualbox/debian {{ grains['lsb_distrib_codename'] }} contrib non-free
+    - comps: contrib
+    - dist: {{ grains['lsb_distrib_codename'] }}
+    - file: /etc/apt/sources.list.d/oracle-virtualbox.list
+    - key_url: https://www.virtualbox.org/download/oracle_vbox_2016.asc
+    - require_in:
+      - pkg: virtualbox
+  pkg.installed:
+    - name: virtualbox-{{ salt['pillar.get']('virtualbox:version') }}
+
 pip:
   pip.installed:
     - upgrade: True
@@ -82,16 +94,12 @@ cuckoodb_priv:
 cuckoo_user:
   group.present:
     - name: {{ salt['pillar.get']('db:user', 'cuckoo') }}
-    - require:
-      - sls: cuckoo.virtualbox
   user.present:
     - name: {{ salt['pillar.get']('db:user', 'cuckoo') }}
     - fullname: {{ salt['pillar.get']('db:user', 'cuckoo') }}
     - gid_from_name: True
     - groups:
       - vboxusers
-    - require:
-      - sls: cuckoo.virtualbox
 
 vboxnet_clear:
   cmd.run:

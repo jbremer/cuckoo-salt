@@ -53,7 +53,6 @@ cuckoo_conf:
       - user: cuckoo_user
       - group: cuckoo_user
 
-
 cuckoo_waf:
   cmd.run:
     - name: cd {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }} && ./utils/community.py -waf

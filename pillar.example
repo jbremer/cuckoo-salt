@@ -12,8 +12,6 @@ vmcloak:
   resultserver_ip: 192.168.56.1
   interface: eno1
   dns: 8.8.8.8
-  ramsize: 4096
-  vramsize: 128
   isomountdir: /mnt
   workingdir: /srv/iso
   office_serial: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
@@ -22,15 +20,22 @@ vms:
   winxp:
     create: yes
     basename: winxp
+    serialkey: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
     count: 10
     ipstart: 100
     tags:
+    cpus: 2
+    ramsize: 2048
+    vramsize: 128
   win7x64:
     create: no
     basename: win7x64
     count: 10
     ipstart: 200
     tags:
+    cpus: 2
+    ramsize: 4096
+    vramsize: 128
 
 db:
   type: postgresql

@@ -14,7 +14,7 @@ vmcloak:
   dns: 8.8.8.8
   ramsize: 4096
   vramsize: 128
-  isomount: /srv/iso/win7
+  isomountdir: /mnt
   workingdir: /srv/iso
   office_serial: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
 

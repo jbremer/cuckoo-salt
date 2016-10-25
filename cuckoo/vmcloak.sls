@@ -88,7 +88,7 @@ wallpaper_jpg:
 
 winxp_mount:
   mount.mounted:
-    - name: {{ salt['pillar.get']('vmcloak:isomount') }}/winxp
+    - name: {{ salt['pillar.get']('vmcloak:isomountdir') }}/winxp
     - device: {{ salt['pillar.get']('vmcloak:workingdir') }}/winxp.iso
     - fstype: udf
     - mkmnt: True
@@ -99,7 +99,7 @@ winxp_mount:
 
 win7x64_mount:
   mount.mounted:
-    - name: {{ salt['pillar.get']('vmcloak:isomount') }}/win7x64
+    - name: {{ salt['pillar.get']('vmcloak:isomountdir') }}/win7x64
     - device: {{ salt['pillar.get']('vmcloak:workingdir') }}/win7x64.iso
     - fstype: udf
     - mkmnt: True

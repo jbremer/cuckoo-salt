@@ -36,7 +36,7 @@ db_drop:
 
 cuckoo_clean:
   cmd.run:
-    - name: {{ salt['pillar.get']('cuckoo:dir') }} && ./cuckoo.py --clean
+    - name: cd {{ salt['pillar.get']('cuckoo:dir') }} && ./cuckoo.py --clean
     - user: cuckoo
     - require:
       - cmd: stop_cuckoo

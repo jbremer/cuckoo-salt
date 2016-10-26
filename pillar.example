@@ -92,15 +92,15 @@ conf:
       terminate_processes: 'off'
       reschedule: 'off'
       process_results: 'off'
-      max_analysis_count: 2
-      max_machines_count: 14
-      max_vmstartup_count: 4
+      max_analysis_count: 0
+      max_machines_count: 0
+      max_vmstartup_count: 10
       freespace: 64
       tmppath: /tmp
       rooter: /tmp/cuckoo-rooter
       node_name: "{{ salt['grains.get']('fqdn') }}"
     routing:
-      route: internet
+      route: 'none'
       internet: 'none'
       rt_table: main
       auto_rt: 'yes'
@@ -225,7 +225,7 @@ conf:
     physical1:
       label: physical1
       platform: windows
-      ip: 192.168.56.101
+      ip: 192.168.2.101
   processing:
     analysisinfo:
       enabled: 'yes'
@@ -276,7 +276,7 @@ conf:
     strings:
       enabled: 'yes'
     suricata:
-      enabled: 'yes'
+      enabled: 'no'
       socket: /var/run/suricata/suricata-command.socket
     targetinfo:
       enabled: 'yes'
@@ -317,19 +317,19 @@ conf:
     jsondump:
       enabled: 'yes'
       indent: 4
-      encoding: UTF-8
+      encoding: latin-1
       calls: 'yes'
     reporthtml:
-      enabled: 'yes'
+      enabled: 'no'
     mongodb:
-      enabled: 'yes'
+      enabled: 'no'
       host: localhost
       port: 27017
       db: {{ salt['grains.get']('host') }}
       store_memdump: 'yes'
       paginate: 100
     elasticsearch:
-      enabled: 'yes'
+      enabled: 'no'
       hosts: localhost:9200
       calls: 'yes'
       index_time_pattern: daily
@@ -337,7 +337,7 @@ conf:
     moloch:
       enabled: 'no'
     mattermost:
-      enabled: 'yes'
+      enabled: 'no'
       url: https://mattermost.example.com/hooks/RandomAPIstring
       myurl: http://{{ salt['grains.get']('fqdn') }}:8080/analysis/
       username: {{ salt['grains.get']('fqdn') }}

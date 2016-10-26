@@ -28,12 +28,6 @@ remove_vmcloak:
     - require:
       - cmd: remove_vms
 
-db_drop:
-  postgres_database.absent:
-    - name: {{ salt['pillar.get']('db:name', 'cuckoo') }}
-    - require:
-      - service: postgresql
-
 cuckoo_clean:
   cmd.run:
     - name: cd {{ salt['pillar.get']('cuckoo:dir') }} && ./cuckoo.py --clean

@@ -89,10 +89,10 @@ winxp_mount:
   mount.mounted:
     - name: {{ salt['pillar.get']('vmcloak:isomountdir') }}/winxp
     - device: {{ salt['pillar.get']('vmcloak:workingdir') }}/winxp.iso
-    - fstype: udf
+    - fstype: iso9660
     - mkmnt: True
     - persist: False
-    - opts: loop
+    - opts: loop,ro
     - require:
       - file: winxp_iso
 
@@ -100,10 +100,10 @@ win7x64_mount:
   mount.mounted:
     - name: {{ salt['pillar.get']('vmcloak:isomountdir') }}/win7x64
     - device: {{ salt['pillar.get']('vmcloak:workingdir') }}/win7x64.iso
-    - fstype: udf
+    - fstype: iso9660
     - mkmnt: True
     - persist: False
-    - opts: loop
+    - opts: loop,ro
     - require:
       - file: win7x64_iso
 

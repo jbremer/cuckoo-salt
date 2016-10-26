@@ -17,13 +17,11 @@ cuckoo_git:
       - sls: cuckoo.volatility
 
 cuckoo_req_install:
-    pip.installed:
-      - requirements: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/requirements.txt
-      - upgrade: True
-      - reload_modules: True
+    cmd.run:
+      - name: pip install -r {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/requirements.txt
       - require:
         - git: cuckoo_git
-        - pip: pip
+        - cmd: pip
 
 cuckoo_chmod:
   file.directory:
@@ -110,7 +108,7 @@ cuckoo_start:
     - shell: /bin/bash
     - require:
       - file: /etc/init.d/cuckoo.sh
-      - pip: cuckoo_req_install
+      - cmd: cuckoo_req_install
       - sls: cuckoo.vmcloak
 
 # We do have an initial systemd unit file, but it's untested/ugly and relies on the old init.d scripts for ExecStart/ExecStop

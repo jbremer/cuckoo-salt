@@ -5,11 +5,10 @@ genisoimage:
   pkg.installed
 
 vmcloak_install:
-  pip.installed:
-    - name: vmcloak
-    - upgrade: True
+  cmd.run:
+    - name: pip install -U vmcloak
     - require:
-      - pip: pip
+      - cmd: pip
 
 vmcloak_workingdir:
   file.directory:
@@ -118,4 +117,4 @@ vmcloak_iptables:
     - runas: root
     - shell: /bin/bash
     - require:
-      - pip: vmcloak_install
+      - cmd: vmcloak_install

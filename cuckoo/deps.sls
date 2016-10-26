@@ -3,7 +3,7 @@ cuckoo_dependencies:
     - refresh: True
     - pkgs:
       - git
-      - python-pip
+      - python-setuptools
       - libffi-dev
       - libssl-dev
       - python-dev
@@ -32,22 +32,23 @@ virtualbox:
   pkg.installed:
     - name: virtualbox-{{ salt['pillar.get']('virtualbox:version') }}
 
-pip:
-  pip.installed:
-    - upgrade: True
-    - reload_modules: True
+pip_uninstalled:
+  pkg.removed:
+    - name: python-pip
     - require:
       - pkg: cuckoo_dependencies
 
-cuckoo_pip:
-  pip.installed:
-    - upgrade: True
+pip:
+  cmd.run:
+    - name: easy_install pip
     - require:
-      - pip: pip
-    - pkgs:
-      - psycopg2
-      - yara-python
-      - distorm3
+      - pkg: pip_uninstalled
+
+cuckoo_pip:
+  cmd.run:
+    - name: pip install -U psycopg2 yara-python distorm3
+    - require:
+      - cmd: pip
 
 # Cuckoo-specific setup instructions, refer to the documentation.
 cuckoo_setcap:

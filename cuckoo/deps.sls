@@ -46,7 +46,7 @@ pip:
 
 cuckoo_pip:
   cmd.run:
-    - name: pip install -U psycopg2 yara-python distorm3
+    - name: pip install -U psycopg2 yara-python distorm3 setuptools
     - require:
       - cmd: pip
 

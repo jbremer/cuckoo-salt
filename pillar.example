@@ -99,11 +99,6 @@ conf:
       tmppath: /tmp
       rooter: /tmp/cuckoo-rooter
       node_name: "{{ salt['grains.get']('fqdn') }}"
-    routing:
-      route: 'none'
-      internet: 'none'
-      rt_table: main
-      auto_rt: 'yes'
     resultserver:
       ip: 192.168.168.1
       port: 2042
@@ -360,7 +355,20 @@ conf:
       snapshot: Snapshot1
       platform: windows
       ip: 192.168.54.111
-  vpn:
+  routing:
+    routing:
+      route: 'none'
+      internet: 'none'
+      rt_table: main
+      auto_rt: 'yes'
+      drop: 'no'
+    inetsim:
+      enabled: 'no'
+      server: 192.168.56.1
+    tor:
+      enabled: 'no'
+      dnsport: 5353
+      proxyport: 9040
     vpn:
       enabled: 'no'
       vpns: vpn0

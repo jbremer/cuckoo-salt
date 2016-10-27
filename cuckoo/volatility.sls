@@ -6,7 +6,7 @@ cuckoo_volatility_git:
 
 cuckoo_install_volatility:
   cmd.run:
-    - name: cd /srv/volatility && python setup.py build && python setup.py build install
+    - name: cd /srv/volatility && python setup.py build install
     - cwd: /srv/volatility
     - shell: /bin/bash
     - onchanges:

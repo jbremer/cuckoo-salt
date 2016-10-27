@@ -47,19 +47,6 @@ community:
       - user: cuckoo_user
       - group: cuckoo_user
 
-cuckoo_process.conf:
-  file.managed:
-    - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/screenconf/process.conf
-    - source: salt://cuckoo/files/process.conf
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
-    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
-    - mode: 644
-    - template: jinja
-    - makedirs: True
-    - require:
-      - user: cuckoo_user
-      - group: cuckoo_user
-
 cuckoo_api.conf:
   file.managed:
     - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/screenconf/api.conf
@@ -77,12 +64,3 @@ limits.conf:
   file.append:
     - name: /etc/security/limits.conf
     - source: salt://cuckoo/files/limits.conf
-
-cuckoo_start:
-  cmd.run:
-    - name: /etc/init.d/cuckoo.sh restart
-    - shell: /bin/bash
-    - require:
-      - file: /etc/init.d/cuckoo.sh
-      - cmd: cuckoo_install
-      - sls: cuckoo.vmcloak

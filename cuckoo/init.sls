@@ -4,40 +4,27 @@ include:
   - cuckoo.vmcloak
   - cuckoo.suricata
 
-cuckoo_git:
-  git.latest:
-    - name: {{ salt['pillar.get']('cuckoo:git', 'https://github.com/cuckoosandbox/cuckoo.git') }}
-    - target: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}
-    - force_clone: True
-    - force_reset: True
-    - branch: {{ salt['pillar.get']('cuckoo:git_branch', 'master') }}
-    - rev: {{ salt['pillar.get']('cuckoo:git_branch', 'HEAD') }}
+package:
+  file.managed:
+    - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/{{ salt['pillar.get']('cuckoo:version') }}
+    - source: salt://cuckoo/files/{{ salt['pillar.get']('cuckoo:version') }}
+
+install:
+  cmd.run:
+    - name: pip install -U {{ salt['pillar.get']('vmcloak:workingdir') }}/{{ salt['pillar.get']('cuckoo:version') }}
     - require:
       - sls: cuckoo.deps
       - sls: cuckoo.volatility
+      - file: package
 
-cuckoo_req_install:
-    cmd.run:
-      - name: pip install -r {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/requirements.txt
-      - require:
-        - git: cuckoo_git
-        - cmd: pip
-
-cuckoo_chmod:
-  file.directory:
-    - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}
+init:
+  cmd.run:
+    - name: cuckoo --cwd {{ salt['pillar.get']('cuckoo:cwd') }} init
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
-    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
-    - mode: 755
-    - recurse:
-      - user
-      - group
     - require:
-      - git: cuckoo_git
-      - user: cuckoo_user
-      - group: cuckoo_user
+      - cmd: install
 
-cuckoo_conf:
+conf:
   file.recurse:
     - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/conf
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
@@ -47,17 +34,16 @@ cuckoo_conf:
     - template: jinja
     - source: salt://cuckoo/files/conf
     - require:
-      - git: cuckoo_git
+      - cmd: init
       - user: cuckoo_user
       - group: cuckoo_user
 
-cuckoo_waf:
+community:
   cmd.run:
-    - name: cd {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }} && ./utils/community.py -waf
+    - name: cuckoo --cwd {{ salt['pillar.get']('cuckoo:cwd') }} community
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
-    - cwd: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}
     - require:
-      - git: cuckoo_git
+      - cmd: install
       - user: cuckoo_user
       - group: cuckoo_user
 
@@ -69,7 +55,7 @@ cuckoo_waf:
     - mode: 755
     - template: jinja
     - require:
-      - git: cuckoo_git
+      - cmd: install
 
 cuckoo_process.conf:
   file.managed:
@@ -97,7 +83,7 @@ cuckoo_api.conf:
       - user: cuckoo_user
       - group: cuckoo_user
 
-cuckoo_limits.conf:
+limits.conf:
   file.append:
     - name: /etc/security/limits.conf
     - source: salt://cuckoo/files/limits.conf
@@ -108,15 +94,5 @@ cuckoo_start:
     - shell: /bin/bash
     - require:
       - file: /etc/init.d/cuckoo.sh
-      - cmd: cuckoo_req_install
+      - cmd: cuckoo_install
       - sls: cuckoo.vmcloak
-
-# We do have an initial systemd unit file, but it's untested/ugly and relies on the old init.d scripts for ExecStart/ExecStop
-# Thusly it's currently commented out
-#'cuckoo.sh':
-  #  service.running:
-    #- enable: True
-    #- watch:
-      #- file: /srv/cuckoo/conf
-    #- require:
-      #- file: /etc/init.d/cuckoo.sh

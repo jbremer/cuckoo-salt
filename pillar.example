@@ -1,10 +1,13 @@
 cuckoo:
-  git: https://github.com/cuckoosandbox/cuckoo.git
-  dir: /srv/cuckoo
-  git_branch: master
+  # For now this should be the filename of the Cuckoo package, e.g.,
+  # Cuckoo-2.0.0.tar.gz. TODO Also be able to provide simply "2.0.0".
+  version: Cuckoo-2.0.0.tar.gz
 
   # User under which to run Cuckoo.
   user: cuckoo
+
+  # Cuckoo Working Directory.
+  cwd: ~/.cuckoo
 
 virtualbox:
   version: 5.1

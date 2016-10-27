@@ -21,7 +21,9 @@ vboxnet0_create:
 
 vboxnet0_setextra:
   cmd.run:
-    - name: VBoxManage setextradata global "HostOnly/vboxnet0/IPAddress" 192.168.168.1
+    - name: >
+        VBoxManage setextradata global "HostOnly/vboxnet0/IPAddress"
+        {{ salt['pillar.get']('vmcloak:ipprefix') }}1 && true
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - require:
       - cmd: vboxnet0_create

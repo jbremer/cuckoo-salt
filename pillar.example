@@ -106,7 +106,7 @@ conf:
       rooter: /tmp/cuckoo-rooter
       node_name: "{{ salt['grains.get']('fqdn') }}"
     resultserver:
-      ip: 192.168.168.1
+      ip: 192.168.56.1
       port: 2042
       force_port: 'no'
       upload_max_size: 4194304000

@@ -91,10 +91,10 @@ db_priv:
 
 cuckoo_user:
   group.present:
-    - name: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - name: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
   user.present:
-    - name: {{ salt['pillar.get']('db:user', 'cuckoo') }}
-    - fullname: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - name: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - fullname: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - gid_from_name: True
     - groups:
       - vboxusers

@@ -26,8 +26,8 @@ cuckoo_req_install:
 cuckoo_chmod:
   file.directory:
     - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}
-    - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
-    - group: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - mode: 755
     - recurse:
       - user
@@ -40,8 +40,8 @@ cuckoo_chmod:
 cuckoo_conf:
   file.recurse:
     - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/conf
-    - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
-    - group: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - file_mode: 644
     - dir_mode: 750
     - template: jinja
@@ -54,7 +54,7 @@ cuckoo_conf:
 cuckoo_waf:
   cmd.run:
     - name: cd {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }} && ./utils/community.py -waf
-    - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - cwd: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}
     - require:
       - git: cuckoo_git
@@ -75,8 +75,8 @@ cuckoo_process.conf:
   file.managed:
     - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/screenconf/process.conf
     - source: salt://cuckoo/files/process.conf
-    - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
-    - group: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - mode: 644
     - template: jinja
     - makedirs: True
@@ -88,8 +88,8 @@ cuckoo_api.conf:
   file.managed:
     - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/screenconf/api.conf
     - source: salt://cuckoo/files/api.conf
-    - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
-    - group: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - mode: 644
     - template: jinja
     - makedirs: True

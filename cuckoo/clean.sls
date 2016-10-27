@@ -24,7 +24,7 @@ remove_vms:
 
 remove_vmcloak:
   file.absent:
-    - name: /home/{{ salt['pillar.get']('db:name', 'cuckoo') }}/.vmcloak
+    - name: /home/{{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}/.vmcloak
     - require:
       - cmd: remove_vms
 

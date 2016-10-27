@@ -10,8 +10,8 @@ suricata:
 
 /var/log/suricata:
   file.directory:
-    - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
-    - group: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - dir_mode: 755
     - file_mode: 644
     - recurse:
@@ -26,8 +26,8 @@ suricata:
 cuckoo_suricata_certs:
   file.directory:
     - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/suricata/certs
-    - user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
-    - group: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - mode: 755
     - makedirs: True
     - require:

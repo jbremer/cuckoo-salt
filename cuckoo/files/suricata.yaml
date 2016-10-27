@@ -829,8 +829,8 @@ asn1-max-frames: 256
 
 # Run suricata as user and group.
 run-as:
-  user: {{ salt['pillar.get']('db:user', 'cuckoo') }}
-  group: {{ salt['pillar.get']('db:user', 'cuckoo') }}
+  user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+  group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
 
 # Some logging module will use that name in event as identifier. The default
 # value is the hostname

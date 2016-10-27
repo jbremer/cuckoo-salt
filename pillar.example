@@ -3,6 +3,9 @@ cuckoo:
   dir: /srv/cuckoo
   git_branch: master
 
+  # User under which to run Cuckoo.
+  user: cuckoo
+
 virtualbox:
   version: 5.1
 

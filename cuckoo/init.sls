@@ -47,16 +47,6 @@ community:
       - user: cuckoo_user
       - group: cuckoo_user
 
-/etc/init.d/cuckoo.sh:
-  file.managed:
-    - source: salt://cuckoo/files/cuckoo.sh
-    - user: root
-    - group: root
-    - mode: 755
-    - template: jinja
-    - require:
-      - cmd: install
-
 cuckoo_process.conf:
   file.managed:
     - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/screenconf/process.conf

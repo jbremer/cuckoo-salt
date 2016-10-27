@@ -19,6 +19,7 @@ cuckoo_dependencies:
       - mongodb
       - postgresql
       - tcpdump
+      - supervisor
 
 virtualbox:
   pkgrepo.managed:

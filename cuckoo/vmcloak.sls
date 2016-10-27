@@ -13,8 +13,8 @@ vmcloak_install:
 vmcloak_workingdir:
   file.directory:
     - name: {{ salt['pillar.get']('vmcloak:workingdir') }}
-    - user: cuckoo
-    - group: cuckoo
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - dir_mode: 755
     - file_mode: 644
     - recurse:
@@ -29,8 +29,8 @@ winxp_iso:
   file.managed:
     - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/winxp.iso
     - source: salt://cuckoo/files/winxp.iso
-    - user: cuckoo
-    - group: cuckoo
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - mode: 644
     - require:
       - file: vmcloak_workingdir
@@ -39,8 +39,8 @@ win7x64_iso:
   file.managed:
     - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/win7x64.iso
     - source: salt://cuckoo/files/win7x64.iso
-    - user: cuckoo
-    - group: cuckoo
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - mode: 644
     - require:
       - file: vmcloak_workingdir
@@ -49,8 +49,8 @@ office2007.iso:
   file.managed:
     - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/office2007.iso
     - source: salt://cuckoo/files/office2007.iso
-    - user: cuckoo
-    - group: cuckoo
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - mode: 644
     - require:
       - file: vmcloak_workingdir
@@ -59,8 +59,8 @@ office2010.iso:
   file.managed:
     - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/office2010.iso
     - source: salt://cuckoo/files/office2010.iso
-    - user: cuckoo
-    - group: cuckoo
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - mode: 644
     - require:
       - file: vmcloak_workingdir
@@ -69,8 +69,8 @@ archive_zip:
   file.managed:
     - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/archive.zip
     - source: salt://cuckoo/files/archive.zip
-    - user: cuckoo
-    - group: cuckoo
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - mode: 644
     - require:
       - file: vmcloak_workingdir
@@ -79,8 +79,8 @@ wallpaper_jpg:
   file.managed:
     - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/wallpaper.jpg
     - source: salt://cuckoo/files/wallpaper.jpg
-    - user: cuckoo
-    - group: cuckoo
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - mode: 644
     - require:
       - file: vmcloak_workingdir

@@ -26,7 +26,7 @@ init:
 
 conf:
   file.recurse:
-    - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/conf
+    - name: {{ salt['pillar.get']('cuckoo:cwd', '~/.cuckoo') }}/conf
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - file_mode: 644

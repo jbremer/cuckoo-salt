@@ -25,6 +25,7 @@ vmcloak_workingdir:
     - require:
       - user: cuckoo_user
 
+{% if salt['pillar.get']('office:2007') != 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX' %}
 office2007.iso:
   file.managed:
     - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/office2007.iso
@@ -34,7 +35,9 @@ office2007.iso:
     - mode: 644
     - require:
       - file: vmcloak_workingdir
+{% endif %}
 
+{% if salt['pillar.get']('office:2010') != 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX' %}
 office2010.iso:
   file.managed:
     - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/office2010.iso
@@ -44,6 +47,7 @@ office2010.iso:
     - mode: 644
     - require:
       - file: vmcloak_workingdir
+{% endif %}
 
 archive_zip:
   file.managed:

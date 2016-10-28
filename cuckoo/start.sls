@@ -10,3 +10,5 @@ start:
     - supervisorctl start cuckoo:
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
+    - require:
+      - cmd: supervisord

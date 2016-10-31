@@ -54,6 +54,10 @@ db:
   password: cuckoo
   port: 5432
 
+api:
+  host: localhost
+  port: 8090
+
 # cuckoo/conf/*.conf
 conf:
   auxiliary:

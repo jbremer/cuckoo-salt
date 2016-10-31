@@ -47,18 +47,31 @@ community:
       - user: cuckoo_user
       - group: cuckoo_user
 
-cuckoo_api.conf:
-  file.managed:
-    - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/screenconf/api.conf
-    - source: salt://cuckoo/files/api.conf
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
-    - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
-    - mode: 644
-    - template: jinja
-    - makedirs: True
-    - require:
-      - user: cuckoo_user
-      - group: cuckoo_user
+api_uwsgi:
+  cmd.run:
+    - name: >
+        cuckoo
+        --cwd {{ salt['pillar.get']('cuckoo:cwd') }}
+        --user {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+        api --uwsgi
+        > /etc/uwsgi/apps-available/cuckoo-api.ini && true
+  file.symlink:
+    - name: /etc/uwsgi/apps-enabled/cuckoo-api.ini
+    - target: /etc/uwsgi/apps-available/cuckoo-api.ini
+
+api_nginx:
+  cmd.run:
+    - name: >
+        cuckoo
+        --cwd {{ salt['pillar.get']('cuckoo:cwd') }}
+        --user {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+        api --nginx
+        --host {{ salt['pillar.get']('api:host', 'localhost') }}
+        --port {{ salt['pillar.get']('api:port', '8090') }}
+        > /etc/nginx/sites-available/cuckoo-api && true
+  file.symlink:
+    - name: /etc/nginx/sites-enabled/cuckoo-api
+    - target: /etc/nginx/sites-available/cuckoo-api
 
 limits.conf:
   file.append:

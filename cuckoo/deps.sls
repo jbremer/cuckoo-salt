@@ -20,6 +20,9 @@ cuckoo_dependencies:
       - postgresql
       - tcpdump
       - supervisor
+      - uwsgi
+      - uwsgi-plugin-python
+      - nginx
 
 virtualbox:
   pkgrepo.managed:
@@ -57,6 +60,18 @@ cuckoo_setcap:
     - name: setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
     - require:
       - pkg: cuckoo_dependencies
+
+uwsgi:
+  service.running:
+    - enable: True
+    - watch:
+      - file: api_uwsgi
+
+nginx:
+  service.running:
+    - enable: True
+    - watch:
+      - file: api_nginx
 
 mongodb:
   service.running:

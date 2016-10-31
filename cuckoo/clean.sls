@@ -3,7 +3,7 @@ include:
 
 stop_cuckoo:
   cmd.run:
-    - supervisorctl stop cuckoo:
+    - name: "supervisorctl stop cuckoo:"
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
 
@@ -30,7 +30,8 @@ remove_vmcloak:
 
 cuckoo_clean:
   cmd.run:
-    - name: cd {{ salt['pillar.get']('cuckoo:dir') }} && ./cuckoo.py --clean
-    - user: cuckoo
+    - name: cuckoo clean
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
     - require:
       - cmd: stop_cuckoo

@@ -7,7 +7,7 @@ cuckoo:
   user: cuckoo
 
   # Cuckoo Working Directory.
-  cwd: ~/.cuckoo
+  cwd: /home/cuckoo/cwd
 
 virtualbox:
   version: 5.1

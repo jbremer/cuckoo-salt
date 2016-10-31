@@ -19,14 +19,15 @@ install:
 
 init:
   cmd.run:
-    - name: cuckoo --cwd {{ salt['pillar.get']('cuckoo:cwd') }} init
+    - name: cuckoo init
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
     - require:
       - cmd: install
 
 conf:
   file.recurse:
-    - name: {{ salt['pillar.get']('cuckoo:cwd', '~/.cuckoo') }}/conf
+    - name: {{ salt['pillar.get']('cuckoo:cwd') }}/conf
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - file_mode: 644
@@ -40,8 +41,9 @@ conf:
 
 community:
   cmd.run:
-    - name: cuckoo --cwd {{ salt['pillar.get']('cuckoo:cwd') }} community
+    - name: cuckoo community
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
     - require:
       - cmd: install
       - user: cuckoo_user
@@ -51,10 +53,10 @@ api_uwsgi:
   cmd.run:
     - name: >
         cuckoo
-        --cwd {{ salt['pillar.get']('cuckoo:cwd') }}
         --user {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
         api --uwsgi
         > /etc/uwsgi/apps-available/cuckoo-api.ini && true
+    - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
   file.symlink:
     - name: /etc/uwsgi/apps-enabled/cuckoo-api.ini
     - target: /etc/uwsgi/apps-available/cuckoo-api.ini
@@ -63,12 +65,12 @@ api_nginx:
   cmd.run:
     - name: >
         cuckoo
-        --cwd {{ salt['pillar.get']('cuckoo:cwd') }}
         --user {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
         api --nginx
         --host {{ salt['pillar.get']('api:host', 'localhost') }}
         --port {{ salt['pillar.get']('api:port', '8090') }}
         > /etc/nginx/sites-available/cuckoo-api && true
+    - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
   file.symlink:
     - name: /etc/nginx/sites-enabled/cuckoo-api
     - target: /etc/nginx/sites-available/cuckoo-api
@@ -77,3 +79,15 @@ limits.conf:
   file.append:
     - name: /etc/security/limits.conf
     - source: salt://cuckoo/files/limits.conf
+
+uwsgi:
+  service.running:
+    - enable: True
+    - watch:
+      - file: api_uwsgi
+
+nginx:
+  service.running:
+    - enable: True
+    - watch:
+      - file: api_nginx

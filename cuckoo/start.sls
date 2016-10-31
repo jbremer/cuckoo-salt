@@ -1,3 +1,6 @@
+include:
+  - cuckoo.vms
+
 supervisord:
   cmd.run:
     # supervisord throws an error if it's already running
@@ -7,8 +10,9 @@ supervisord:
 
 start:
   cmd.run:
-    - supervisorctl start cuckoo:
+    - name: "supervisorctl start cuckoo:"
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
     - require:
       - cmd: supervisord
+      - cmd: vboxnet0_ipconfig

@@ -61,18 +61,6 @@ cuckoo_setcap:
     - require:
       - pkg: cuckoo_dependencies
 
-uwsgi:
-  service.running:
-    - enable: True
-    - watch:
-      - file: api_uwsgi
-
-nginx:
-  service.running:
-    - enable: True
-    - watch:
-      - file: api_nginx
-
 mongodb:
   service.running:
     - enable: True

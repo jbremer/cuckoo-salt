@@ -1,11 +1,11 @@
 include:
   - cuckoo.deps
 
-# Once we put in the Cuckoo package, we'll be able to simply run
-# "supervisorctl stop cuckoo".
 stop_cuckoo:
   cmd.run:
-    - name: exit
+    - supervisorctl stop cuckoo:
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
 
 stop_vbox:
   cmd.run:

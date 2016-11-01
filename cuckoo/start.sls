@@ -1,6 +1,3 @@
-include:
-  - cuckoo.vms
-
 supervisord:
   cmd.run:
     # supervisord throws an error if it's already running

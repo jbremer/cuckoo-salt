@@ -56,6 +56,7 @@ db:
   port: 5432
 
 api:
+  # host: {{ salt['grains.get']('ip4_interfaces:em2')[0] }}
   host: localhost
   port: 8090
 
@@ -109,7 +110,7 @@ conf:
       freespace: 64
       tmppath: /tmp
       rooter: /tmp/cuckoo-rooter
-      node_name: "{{ salt['grains.get']('fqdn') }}"
+      node_name: {{ salt['grains.get']('fqdn') }}
     resultserver:
       ip: 192.168.56.1
       port: 2042

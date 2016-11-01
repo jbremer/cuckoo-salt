@@ -10,12 +10,12 @@ stop_cuckoo:
 stop_vbox:
   cmd.run:
     - name: vmcloak-killvbox || true
-    - user: cuckoo
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
 
 remove_vms:
   cmd.run:
     - name: echo y|vmcloak-removevms
-    - user: cuckoo
+    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
 
 remove_vmcloak:
   file.absent:

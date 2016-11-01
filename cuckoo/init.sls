@@ -19,9 +19,8 @@ install:
 
 init:
   cmd.run:
-    - name: cuckoo init
+    - name: cuckoo --cwd {{ salt['pillar.get']('cuckoo:cwd') }} init
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
-    - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
     - require:
       - cmd: install
 

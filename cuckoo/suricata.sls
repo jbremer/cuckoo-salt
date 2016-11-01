@@ -25,7 +25,7 @@ suricata:
 
 cuckoo_suricata_certs:
   file.directory:
-    - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/suricata/certs
+    - name: /home/{{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}/suricata/certs
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - group: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - mode: 755

@@ -275,7 +275,7 @@ outputs:
   # output module to store certificates chain to disk
   - tls-store:
       enabled: no
-      certs-log-dir: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/suricata/certs # directory to store the certificates files
+      certs-log-dir: /home/{{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}/suricata/certs # directory to store the certificates files
 
   # a line based log of DNS requests and/or replies (no alerts)
   - dns-log:

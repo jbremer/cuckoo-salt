@@ -117,7 +117,7 @@ win7x64_mount:
 
 vmcloak_cleanup:
   file.absent:
-    - name: {{ salt['pillar.get']('cuckoo:dir', '/srv/cuckoo') }}/.vmcloak
+    - name: /home/{{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}/.vmcloak
 
 vmcloak_iptables:
   cmd.run:

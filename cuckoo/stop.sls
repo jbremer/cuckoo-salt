@@ -1,5 +1,5 @@
 stop:
   cmd.run:
-    - supervisorctl stop cuckoo:
+    - name: "supervisorctl stop cuckoo:"
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}

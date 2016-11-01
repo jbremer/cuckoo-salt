@@ -14,7 +14,6 @@ virtualbox:
 
 vmcloak:
   ipprefix: 192.168.56.
-  # First VMs IP address last octet minus one.
   resultserver_ip: 192.168.56.1
   interface: eno1
   dns: 8.8.8.8
@@ -31,6 +30,7 @@ vms:
     basename: winxp
     serialkey: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
     count: 10
+    # First VMs IP address last octet minus one.
     ipstart: 100
     tags:
     cpus: 2
@@ -40,6 +40,7 @@ vms:
     create: no
     basename: win7x64
     count: 10
+    # First VMs IP address last octet minus one.
     ipstart: 200
     tags:
     cpus: 2
@@ -117,7 +118,7 @@ conf:
     processing:
       analysis_size_limit: 4194304000
       resolve_dns: 'on'
-      sort_pcap: 'on'
+      sort_pcap: 'off'
     database:
       timeout: ""
     timeouts:

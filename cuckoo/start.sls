@@ -12,4 +12,3 @@ start:
     - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
     - require:
       - cmd: supervisord
-      - cmd: vboxnet0_ipconfig

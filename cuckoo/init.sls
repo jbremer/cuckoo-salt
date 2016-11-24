@@ -20,7 +20,7 @@ install:
 init:
   cmd.run:
     - name: cuckoo --cwd {{ salt['pillar.get']('cuckoo:cwd') }} init
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - require:
       - cmd: install
 
@@ -41,7 +41,7 @@ conf:
 community:
   cmd.run:
     - name: cuckoo community
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
     - require:
       - cmd: install

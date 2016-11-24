@@ -4,18 +4,18 @@ include:
 stop_cuckoo:
   cmd.run:
     - name: "supervisorctl stop cuckoo:"
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
 
 stop_vbox:
   cmd.run:
     - name: vmcloak-killvbox || true
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
 
 remove_vms:
   cmd.run:
     - name: echo y|vmcloak-removevms
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
 
 remove_vmcloak:
   file.absent:
@@ -24,7 +24,7 @@ remove_vmcloak:
 cuckoo_clean:
   cmd.run:
     - name: cuckoo clean
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
     - require:
       - cmd: stop_cuckoo

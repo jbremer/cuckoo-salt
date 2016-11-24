@@ -7,7 +7,7 @@ vboxnet0_remove:
     - name: >
         vboxmanage list -l hostonlyifs | grep -oP "(?<=\s)vboxnet\d+$" |
         xargs -I {} vboxmanage hostonlyif remove {} && true
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - require:
       - user: cuckoo_user
       - pkg: virtualbox
@@ -15,7 +15,7 @@ vboxnet0_remove:
 vboxnet0_create:
   cmd.run:
     - name: VBoxManage hostonlyif create
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - require:
       - cmd: vboxnet0_remove
 
@@ -24,7 +24,7 @@ vboxnet0_setextra:
     - name: >
         VBoxManage setextradata global "HostOnly/vboxnet0/IPAddress"
         {{ salt['pillar.get']('vmcloak:ipprefix') }}1 && true
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - require:
       - cmd: vboxnet0_create
 
@@ -34,7 +34,7 @@ vboxnet0_ipconfig:
         VBoxManage hostonlyif ipconfig vboxnet0
         --ip {{ salt['pillar.get']('vmcloak:ipprefix') }}1
         --netmask 255.255.255.0 && true
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - require:
       - cmd: vboxnet0_setextra
 
@@ -51,7 +51,7 @@ winxp_master_init:
         --ramsize {{ salt['pillar.get']('vms:winxp:ramsize') }}
         --vramsize {{ salt['pillar.get']('vms:winxp:vramsize') }}
         && true
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - require:
       - cmd: vboxnet0_ipconfig
       - mount: winxp_mount
@@ -62,7 +62,7 @@ winxp_master_install:
         vmcloak install winxp_master
         adobepdf:9.0.0 wic pillow dotnet:4.0 wallpaper
         && true
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - require:
       - cmd: winxp_master_init
 
@@ -74,7 +74,7 @@ winxp_snapshots:
         {{ salt['pillar.get']('vms:winxp:basename') }}
         {{ salt['pillar.get']('vmcloak:ipprefix') }}{{ salt['pillar.get']('vms:winxp:ipstart') + 1 }}
         && true
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - require:
       - cmd: winxp_master_install
 {% endif %}
@@ -92,7 +92,7 @@ win7x64_master_init:
         --ramsize {{ salt['pillar.get']('vms:win7x64:ramsize') }}
         --vramsize {{ salt['pillar.get']('vms:win7x64:vramsize') }}
         && true
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - require:
       - cmd: vboxnet0_ipconfig
       - mount: win7x64_mount
@@ -104,7 +104,7 @@ win7x64_master_install:
         adobepdf:9.0.0 wic pillow dotnet:4.6.1 java:7u71 flash:15.0.0.167
         winrar cuteftp wallpaper
         && true
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - require:
       - cmd: win7x64_master_init
 
@@ -118,7 +118,7 @@ win7x64_office2007:
         office.serialkey={{ salt['pillar.get']('office:2007') }}
         office.activate=1
         && true
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - require:
       - cmd: win7x64_master_install
       - file: office2007.iso
@@ -134,7 +134,7 @@ win7x64_office2010:
         office.serialkey={{ salt['pillar.get']('office:2010') }}
         office.activate=1
         && true
-    - user: cuckoo
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - require:
       - cmd: win7x64_master_install
       - file: office2010.iso
@@ -148,7 +148,7 @@ win7x64_snapshots:
         {{ salt['pillar.get']('vms:win7x64:basename') }}
         {{ salt['pillar.get']('vmcloak:ipprefix') }}{{ salt['pillar.get']('vms:win7x64:ipstart') + 1 }}
         && true
-    - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
+    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - require:
       - cmd: win7x64_master_install
 {% endif %}

@@ -49,7 +49,7 @@ winxp_master_init:
         --gateway {{ salt['pillar.get']('vmcloak:ipprefix') }}1
         --dns {{ salt['pillar.get']('vmcloak:dns') }}
         --ramsize {{ salt['pillar.get']('vms:winxp:ramsize') }}
-        --vramsize {{ salt['pillar.get']('vms:winxp:vramsize')}}
+        --vramsize {{ salt['pillar.get']('vms:winxp:vramsize') }}
         && true
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - require:
@@ -115,7 +115,7 @@ win7x64_office2007:
         vmcloak install win7x64_master
         office
         office.isopath={{ salt['pillar.get']('vmcloak:workingdir') }}/office2007.iso
-        office.serialkey={{ salt[pillar.get]('office:2007') }}
+        office.serialkey={{ salt['pillar.get']('office:2007') }}
         office.activate=1
         && true
     - user: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
@@ -131,7 +131,7 @@ win7x64_office2010:
         vmcloak install win7x64_master
         office
         office.isopath={{ salt['pillar.get']('vmcloak:workingdir') }}/office2010.iso
-        office.serialkey={{ salt[pillar.get]('office:2010') }}
+        office.serialkey={{ salt['pillar.get']('office:2010') }}
         office.activate=1
         && true
     - user: cuckoo

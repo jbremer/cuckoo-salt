@@ -281,6 +281,7 @@ conf:
       enabled: 'no'
     static:
       enabled: 'yes'
+      pdf_timeout: 60
     strings:
       enabled: 'yes'
     suricata:
@@ -349,9 +350,9 @@ conf:
       url: https://mattermost.example.com/hooks/RandomAPIstring
       myurl: http://{{ salt['grains.get']('fqdn') }}:8080/analysis/
       username: {{ salt['grains.get']('fqdn') }}
-      show-virustotal: 1
-      show-signatures: 1
-      show-urls: 1
+      show_virustotal: 1
+      show_signatures: 1
+      show_urls: 1
   virtualbox:
     virtualbox:
       mode: headless

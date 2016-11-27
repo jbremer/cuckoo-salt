@@ -66,6 +66,7 @@ conf:
     sniffer:
       enabled: 'yes'
       tcpdump: /usr/sbin/tcpdump
+      bpf: not arp
     mitm:
       enabled: 'no'
       mitmdump: /usr/local/bin/mitmdump

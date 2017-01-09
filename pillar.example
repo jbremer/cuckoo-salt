@@ -267,6 +267,8 @@ conf:
       maxioc: 100
     network:
       enabled: 'yes'
+      whitelist_dns: 'no'
+      allowed_dns:
     procmemory:
       enabled: 'yes'
       idapro: 'no'

@@ -1,11 +1,6 @@
 include:
   - cuckoo.deps
-
-stop_cuckoo:
-  cmd.run:
-    - name: "supervisorctl stop cuckoo:"
-    - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
-    - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
+  - cuckoo.stop
 
 stop_vbox:
   cmd.run:

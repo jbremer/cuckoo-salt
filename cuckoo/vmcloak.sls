@@ -115,10 +115,6 @@ win7x64_mount:
       - file: win7x64_iso
 {% endif %}
 
-vmcloak_cleanup:
-  file.absent:
-    - name: /home/{{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}/.vmcloak
-
 vmcloak_iptables:
   cmd.run:
     - name: vmcloak-iptables {{ salt['pillar.get']('vmcloak:ipprefix') }}0/24 {{ salt['pillar.get']('vmcloak:interface') }}

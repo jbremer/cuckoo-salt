@@ -20,5 +20,3 @@ cuckoo_clean:
     - name: cuckoo clean
     - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
-    - require:
-      - cmd: stop_cuckoo

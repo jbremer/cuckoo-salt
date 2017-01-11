@@ -97,7 +97,6 @@ conf:
   cuckoo:
     cuckoo:
       version_check: 'on'
-      cuckoo_id: {{ salt['grains.get']('host') }}
       delete_original: 'off'
       delete_bin_copy: 'off'
       machinery: virtualbox
@@ -111,7 +110,6 @@ conf:
       freespace: 64
       tmppath: /tmp
       rooter: /tmp/cuckoo-rooter
-      node_name: {{ salt['grains.get']('fqdn') }}
     resultserver:
       ip: 192.168.56.1
       port: 2042
@@ -345,6 +343,11 @@ conf:
       calls: 'yes'
       index_time_pattern: daily
       cuckoo_node: "{{ salt['grains.get']('fqdn') }}"
+    misp:
+      enabled: 'no'
+      url:
+      apikey:
+      maxioc: 100
     moloch:
       enabled: 'no'
     mattermost:
@@ -355,6 +358,11 @@ conf:
       show_virustotal: 1
       show_signatures: 1
       show_urls: 1
+      hash_filename: 1
+    notification:
+      enabled: 'no'
+      url: ""
+      identifier: ""
   virtualbox:
     virtualbox:
       mode: headless
@@ -401,6 +409,7 @@ conf:
       pwd: password_goes_here
       machines: analysis1
       interface: eth0
+      unverified_ssl: 'no'
     analysis1:
       label: cuckoo1
       platform: windows

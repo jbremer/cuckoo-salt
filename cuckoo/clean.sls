@@ -1,5 +1,4 @@
 include:
-  - cuckoo.deps
   - cuckoo.stop
 
 stop_vbox:

@@ -1,6 +1,3 @@
-include:
-  - cuckoo.deps
-
 package:
   file.managed:
     - name: {{ salt['pillar.get']('vmcloak:workingdir') }}/{{ salt['pillar.get']('cuckoo:version') }}
@@ -10,7 +7,6 @@ install:
   cmd.run:
     - name: pip install -U {{ salt['pillar.get']('vmcloak:workingdir') }}/{{ salt['pillar.get']('cuckoo:version') }}
     - require:
-      - sls: cuckoo.deps
       - file: package
 
 init:
@@ -31,5 +27,3 @@ conf:
     - source: salt://cuckoo/files/conf
     - require:
       - cmd: init
-      - user: cuckoo_user
-      - group: cuckoo_user

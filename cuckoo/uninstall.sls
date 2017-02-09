@@ -1,3 +1,3 @@
 uninstall:
   cmd.run:
-    - name: pip uninstall cuckoo
+    - name: pip uninstall -y cuckoo

@@ -10,7 +10,7 @@ stop_supervisord:
     - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
 
-kill_tcpdump:
+kill_related:
   cmd.run:
-    - name: "killall tcpdump"
+    - name: "vmcloak-killvbox"
     - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}

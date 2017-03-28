@@ -271,6 +271,7 @@ conf:
       enabled: 'yes'
       idapro: 'no'
       extract_img: 'yes'
+      extract_dll: 'no'
       dump_delete: 'no'
     procmon:
       enabled: 'yes'
@@ -326,10 +327,11 @@ conf:
     jsondump:
       enabled: 'yes'
       indent: 4
-      encoding: latin-1
       calls: 'yes'
-    reporthtml:
+    singlefile:
       enabled: 'no'
+      html: 'no'
+      pdf: 'no'
     mongodb:
       enabled: 'no'
       host: localhost
@@ -347,7 +349,6 @@ conf:
       enabled: 'no'
       url:
       apikey:
-      maxioc: 100
     moloch:
       enabled: 'no'
     mattermost:

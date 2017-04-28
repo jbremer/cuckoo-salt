@@ -35,6 +35,7 @@ Maintenance methods:
 * `cuckoo.uninstall`: uninstall Cuckoo.
 * `cuckoo.update`: stop, uninstall, install, and start Cuckoo.
 * `cuckoo.clean`: remove all analyses, submitted binaries, and database entries.
+* `cuckoo.removevms`: remove all VMs
 
 ## TODO
 

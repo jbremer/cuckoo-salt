@@ -43,3 +43,23 @@ Maintenance methods:
 - Turn into a proper salt formula
 - Add a mongo deploy state?
 - Add an ELK cluster deploy state?
+
+## Reverse port tunneling & temporary Salt Master
+
+In case one doesn't want to expose the SaltStack master to the internet the
+entire time it is possible to use reverse tunneling in your setup. In such a
+setup we'll assume three different types of machines: master, proxy, minion.
+
+On the master machine:
+* Setup salt-master and disable the service.
+
+On the minion machine:
+* Setup salt-minion and point it to your proxy.
+
+On the proxy machine:
+* Enable GatewayPorts for your user, https://askubuntu.com/questions/50064/reverse-port-tunnelling.
+
+Now each time you'll want to push commands from the Master to a Minion, it is
+required to go through the following steps:
+* On the master, `ssh -R 4505:localhost:4505 -R 4506:localhost:4506 proxy`.
+* On the master, run `salt-master -l debug` as a foreground process.

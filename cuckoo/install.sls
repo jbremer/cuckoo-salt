@@ -31,5 +31,3 @@ conf:
     - dir_mode: 750
     - template: jinja
     - source: salt://cuckoo/files/conf
-    - require:
-      - cmd: init

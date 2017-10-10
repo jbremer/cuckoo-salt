@@ -115,6 +115,7 @@ win7x64_mount:
       - file: win7x64_iso
 {% endif %}
 
+{% if salt['pillar.get']('vmcloak:interface') %}
 vmcloak_iptables:
   cmd.run:
     - name: vmcloak-iptables {{ salt['pillar.get']('vmcloak:ipprefix') }}0/24 {{ salt['pillar.get']('vmcloak:interface') }}
@@ -122,3 +123,4 @@ vmcloak_iptables:
     - shell: /bin/bash
     - require:
       - cmd: vmcloak_install
+{% endif %}

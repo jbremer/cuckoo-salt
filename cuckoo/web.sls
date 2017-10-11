@@ -16,8 +16,8 @@ web_nginx:
         cuckoo
         --user {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
         web --nginx
-        --host {{ salt['pillar.get']('api:host', 'localhost') }}
-        --port {{ salt['pillar.get']('api:port', '8000') }}
+        --host {{ salt['pillar.get']('web:host', 'localhost') }}
+        --port {{ salt['pillar.get']('web:port', '8000') }}
         > /etc/nginx/sites-available/cuckoo-web && true
     - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
   file.symlink:

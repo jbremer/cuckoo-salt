@@ -36,6 +36,7 @@ Maintenance methods:
 * `cuckoo.update`: stop, uninstall, install, and start Cuckoo.
 * `cuckoo.clean`: remove all analyses, submitted binaries, and database entries.
 * `cuckoo.removevms`: remove all VMs
+* `cuckoo.web`: enable the Cuckoo Web Interface (requires reporting:mongodb:enabled to be true)
 
 ## TODO
 

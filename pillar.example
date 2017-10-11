@@ -60,6 +60,10 @@ api:
   host: localhost
   port: 8090
 
+web:
+  host: localhost
+  port: 8000
+
 # cuckoo/conf/*.conf
 conf:
   auxiliary:

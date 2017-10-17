@@ -6,7 +6,8 @@ genisoimage:
 
 vmcloak_install:
   cmd.run:
-    - name: pip install -U vmcloak
+    # Do not upgrade dependencies here.
+    - name: pip install vmcloak
     - require:
       - cmd: pip
 

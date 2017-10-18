@@ -44,6 +44,7 @@ Maintenance methods:
 - Turn into a proper salt formula
 - Add a mongo deploy state?
 - Add an ELK cluster deploy state?
+- Add user www-data to cuckoo & other way around.
 
 ## Reverse port tunneling & temporary Salt Master
 

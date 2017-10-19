@@ -1,7 +1,12 @@
+# Note: this is the default configuration file as required by the latest (?)
+# version of Cuckoo Sandbox at this moment (i.e., 2.0.4).
+#
+# TODO Update vmcloak:interface if global network routing is desired.
+
 cuckoo:
   # For now this should be the filename of the Cuckoo package, e.g.,
   # Cuckoo-2.0.0.tar.gz. TODO Also be able to provide simply "2.0.0".
-  version: Cuckoo-2.0.0.tar.gz
+  version: Cuckoo-2.0.4.4.tar.gz
 
   # User under which to run Cuckoo.
   user: cuckoo
@@ -15,7 +20,8 @@ virtualbox:
 vmcloak:
   ipprefix: 192.168.56.
   resultserver_ip: 192.168.56.1
-  interface: eno1
+  # If set, uses vmcloak-iptables to provide internet access.
+  interface:
   dns: 8.8.8.8
   isomountdir: /mnt
   workingdir: /srv/iso
@@ -56,7 +62,6 @@ db:
   port: 5432
 
 api:
-  # host: {{ salt['grains.get']('ip4_interfaces:em2')[0] }}
   host: localhost
   port: 8090
 
@@ -343,6 +348,8 @@ conf:
       db: {{ salt['grains.get']('host') }}
       store_memdump: 'yes'
       paginate: 100
+      username: ''
+      password: ''
     elasticsearch:
       enabled: 'no'
       hosts: localhost:9200

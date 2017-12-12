@@ -29,6 +29,9 @@ Common methods:
 * `cuckoo.start`: start Cuckoo.
 * `cuckoo.stop`: stop Cuckoo.
 
+Don't forget to pass along the `-t 3600` parameter when `state.apply`'ing
+`cuckoo.vms` as this operation may take more than 10 minutes.
+
 Maintenance methods:
 * `cuckoo.community`: fetch the latest Community release.
 * `cuckoo.install`: install Cuckoo.

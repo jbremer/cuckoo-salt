@@ -1,0 +1,61 @@
+{%- set mem = salt['grains.get']('mem_total') %}
+{%- if mem >= 16000 %}
+{%- set index_mem = '8192' %}
+{%- elif mem < 16000 %}
+{%- set index_mem = (mem / 2) | int %}
+{%- elif mem < 2000 %}
+{%- set index_mem = '512' %}
+{%- endif %}
+
+{%- if mem >= 24000 %}
+{%- set cache = 16 %}
+{%- else %}
+{%- set cache = (mem / 2 ) / 1000 | int %}
+{%- endif %}
+
+
+# mongod.conf, Percona Server for MongoDB
+# for documentation of all options, see:
+#   http://docs.mongodb.org/manual/reference/configuration-options/
+
+# Where and how to store data.
+storage:
+  dbPath: {{ salt['pillar.get']('cuckoo:mongo:dbPath', '/var/lib/mongodb') }}
+  directoryPerDB: true
+  journal:
+    enabled: true
+  engine: wiredTiger
+
+  wiredTiger:
+    engineConfig:
+      cacheSizeGB: {{ cache }}
+      statisticsLogDelaySecs: 0
+      journalCompressor: none
+      directoryForIndexes: true
+    collectionConfig:
+      blockCompressor: snappy
+    indexConfig:
+      prefixCompression: false
+
+
+# Two options below can be used for wiredTiger and inMemory storage engines
+setParameter:
+    maxIndexBuildMemoryUsageMegabytes: {{ index_mem }}
+    wiredTigerConcurrentReadTransactions: 1048576
+    wiredTigerConcurrentWriteTransactions: 1048576
+    replWriterThreadCount: 256
+
+# where to write logging data.
+systemLog:
+  destination: file
+  logAppend: true
+  path: /var/log/mongodb/mongod.log
+
+processManagement:
+  fork: true
+  pidFilePath: /var/run/mongod.pid
+
+# network interfaces
+net:
+  port: {{ salt['pillar.get']('conf:reporting:mongodb:port', '27017') }}
+  bindIp: {{ salt['pillar.get']('conf:reporting:mongodb:host', 'localhost') }}

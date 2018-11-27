@@ -13,6 +13,8 @@ cuckoo:
 
   # Cuckoo Working Directory.
   cwd: /home/cuckoo/cwd
+  mongo:
+    dbPath: /var/lib/mongodb
 
 virtualbox:
   version: 5.1

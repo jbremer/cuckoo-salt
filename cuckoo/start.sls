@@ -1,3 +1,7 @@
+start-rooter:
+  cmd.run:
+    - name: systemctl start cuckoo-rooter
+
 supervisord:
   cmd.run:
     # supervisord throws an error if it's already running
@@ -11,4 +15,5 @@ start:
     - runas: {{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}
     - cwd: {{ salt['pillar.get']('cuckoo:cwd') }}
     - require:
+      - cmd: start-rooter
       - cmd: supervisord

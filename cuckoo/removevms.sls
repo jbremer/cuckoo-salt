@@ -8,4 +8,4 @@ vbox_removevms:
 
 vmcloak_cleanup:
   file.absent:
-    - name: /home/{{ salt['pillar.get']('cuckoo:user', 'cuckoo') }}/.vmcloak
+    - name: {{ salt['pillar.get']('cuckoo:home', '/home/cuckoo') }}/.vmcloak

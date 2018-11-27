@@ -13,6 +13,7 @@ cuckoo:
 
   # Cuckoo Working Directory.
   cwd: /home/cuckoo/cwd
+  etpro: 000000000000000
 
 virtualbox:
   version: 5.1

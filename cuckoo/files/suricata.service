@@ -1,0 +1,18 @@
+[Unit]
+Description=Open Source Next Generation Intrusion Detection and Prevention Engine
+After=syslog.target network.target
+
+[Service]
+Type=forking
+Restart=always
+TimeoutStartSec=8
+RestartSec=8
+ExecStartPre=/bin/rm -f @e_rundir@suricata.pid
+ExecStartPre=/bin/mkdir -p /var/run/suricata
+ExecStartPre=/bin/chown -R cuckoo:cuckoo /var/run/suricata
+ExecStart=/usr/bin/suricata -c /etc/suricata/suricata.yaml --pidfile @e_rundir@suricata.pid --unix-socket -D -vvv
+ExecReload=/bin/kill -HUP $MAINPID
+ExecStop=/bin/kill $MAINPID
+
+[Install]
+WantedBy=multi-user.target

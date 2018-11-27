@@ -35,7 +35,7 @@ api_nginx:
 limits.conf:
   file.append:
     - name: /etc/security/limits.conf
-    - source: salt://cuckoo/files/limits.conf
+    - source: salt://{{ slspath }}/files/limits.conf
 
 uwsgi:
   service.running:

@@ -13,6 +13,10 @@ cuckoo:
 
   # Cuckoo Working Directory.
   cwd: /home/cuckoo/cwd
+  # Cuckoo home dir
+  home: /home/cuckoo
+  # How many processing nodes to run
+  process: 4
 
 virtualbox:
   version: 5.1
@@ -295,8 +299,13 @@ conf:
     strings:
       enabled: 'yes'
     suricata:
-      enabled: 'no'
+      enabled: 'yes'
+      suricata: /usr/bin/suricata
       socket: /var/run/suricata/suricata-command.socket
+      conf: /etc/suricata/suricata.yaml
+      eve_log: eve.json
+      files_log: files-json.log
+      files_dir: files
     targetinfo:
       enabled: 'yes'
     virustotal:

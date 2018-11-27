@@ -1,0 +1,13 @@
+[Unit]
+Description=Cuckoo Rooter
+After=network.target
+
+[Service]
+Type=simple
+Restart=on-failure
+StandardOutput=tty
+ExecStart=/usr/local/bin/cuckoo --cwd {{ salt['pillar.get']('cuckoo:cwd') }} rooter
+WorkingDirectory={{ salt['pillar.get']('cuckoo:cwd') }}
+
+[Install]
+WantedBy=multi-user.target
